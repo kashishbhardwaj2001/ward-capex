@@ -47,9 +47,12 @@ CACHE.mkdir(parents=True, exist_ok=True)
 
 # kumi.systems first: it is materially less loaded than the main instance, which returns
 # 504 on a city-sized bbox at busy times. Both are tried before a city is given up on.
+# kumi.systems first: it is materially less loaded than the main instance, which returns
+# 504 on a city-sized bbox at busy times. overpass.osm.jp was in this list and is dropped -
+# it refuses connections outright, so it only ever contributed a misleading last-error
+# message ("ConnectionError") that masked why the other two had failed.
 ENDPOINTS = ["https://overpass.kumi.systems/api/interpreter",
-             "https://overpass-api.de/api/interpreter",
-             "https://overpass.osm.jp/api/interpreter"]
+             "https://overpass-api.de/api/interpreter"]
 
 # BOTH public Overpass mirrors refuse a request that does not identify itself, and they
 # refuse it in ways that look like something else: overpass-api.de returns 406 Not
@@ -69,35 +72,89 @@ CLASSES = {"drain": ["drain"], "ditch": ["ditch"], "canal": ["canal"],
 ALL = [v for vs in CLASSES.values() for v in vs]
 
 
+def _one(q, label):
+    """POST a single Overpass query, returning its JSON or None."""
+    last = ""
+    for ep in ENDPOINTS:
+        for attempt in range(2):
+            try:
+                r = requests.post(ep, data={"data": q}, headers=HEADERS,
+                                  timeout=(15, 240))
+                if r.status_code == 200:
+                    return r.json()
+                last = f"{ep.split('/')[2]} HTTP {r.status_code}"
+                # 429 = slow down. 504 = the query was too expensive for a loaded
+                # server; retrying the SAME query harder does not help, which is what
+                # tiling below is for.
+                time.sleep(20 if r.status_code == 429 else 5)
+            except Exception as e:
+                last = f"{ep.split('/')[2]} {type(e).__name__}"
+                time.sleep(5)
+    print(f"      {label}: {last}")
+    return None
+
+
+def tiles(bbox, n):
+    """Split a bbox into an n x n grid."""
+    minx, miny, maxx, maxy = bbox
+    dx, dy = (maxx - minx) / n, (maxy - miny) / n
+    return [(minx + i * dx, miny + j * dy, minx + (i + 1) * dx, miny + (j + 1) * dy)
+            for i in range(n) for j in range(n)]
+
+
 def query(bbox, city):
+    """Fetch a city's drainage line-work, tiling if the whole-city query is too big.
+
+    WHY TILING RATHER THAN BACKING OFF HARDER. A city-sized bbox over a dense OSM area
+    makes Overpass do a lot of work, and a loaded public instance answers 504 rather than
+    finishing. That is not rate-limiting: the same query will 504 again no matter how long
+    you wait between attempts, which is why the first version of this crawled for an hour
+    and gave up on half the cities. Splitting the bbox into a grid turns one expensive
+    query into several cheap ones that each complete comfortably.
+
+    Ways crossing a tile boundary are returned by every tile they touch, so results are
+    de-duplicated on OSM way id before use.
+    """
     cp = CACHE / f"{city}.json"
     if cp.exists():
         try:
             return json.loads(cp.read_text())
         except Exception:
             cp.unlink(missing_ok=True)
-    s, w, n, e = bbox[1], bbox[0], bbox[3], bbox[2]
-    q = (f'[out:json][timeout:180];('
-         f'way["waterway"~"^({"|".join(ALL)})$"]({s},{w},{n},{e});'
-         f'way["tunnel"="culvert"]({s},{w},{n},{e});'
-         f');out geom;')
-    last = ""
-    for ep in ENDPOINTS:
-        for attempt in range(3):
-            try:
-                r = requests.post(ep, data={"data": q}, headers=HEADERS,
-                                  timeout=(15, 300))
-                if r.status_code == 200:
-                    j = r.json()
-                    cp.write_text(json.dumps(j))
-                    return j
-                last = f"{ep.split('/')[2]} HTTP {r.status_code}: {r.text[:90].strip()}"
-                # 429 means slow down; anything else will not improve by retrying fast
-                time.sleep(30 if r.status_code == 429 else 8 * (attempt + 1))
-            except Exception as e:
-                last = f"{ep.split('/')[2]} {type(e).__name__}: {str(e)[:80]}"
-                time.sleep(8 * (attempt + 1))
-    print(f"  {city:16s} QUERY FAILED - {last}")
+
+    def build_q(b):
+        s_, w_, n_, e_ = b[1], b[0], b[3], b[2]
+        return (f'[out:json][timeout:120];('
+                f'way["waterway"~"^({"|".join(ALL)})$"]({s_},{w_},{n_},{e_});'
+                f'way["tunnel"="culvert"]({s_},{w_},{n_},{e_});'
+                f');out geom;')
+
+    for grid in (1, 2, 3, 4):
+        parts, ok = [], True
+        boxes = [bbox] if grid == 1 else tiles(bbox, grid)
+        if grid > 1:
+            print(f"    {city}: retrying as {grid}x{grid} = {len(boxes)} tiles")
+        for k, b in enumerate(boxes):
+            j = _one(build_q(b), f"{city} tile {k+1}/{len(boxes)}")
+            if j is None:
+                ok = False
+                break
+            parts.extend(j.get("elements", []))
+            if grid > 1:
+                time.sleep(1)
+        if ok:
+            seen, els = set(), []
+            for e in parts:                      # a way spanning tiles comes back twice
+                i = e.get("id")
+                if i in seen:
+                    continue
+                seen.add(i)
+                els.append(e)
+            out = {"elements": els}
+            cp.write_text(json.dumps(out))
+            return out
+
+    print(f"  {city:16s} QUERY FAILED at every tiling up to 4x4")
     return None
 
 

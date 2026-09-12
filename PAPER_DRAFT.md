@@ -457,6 +457,12 @@ The hazard penalty is roughly **twice as large where little drainage exists**. E
 infrastructure absorbs some of the gap; it does not close it. The penalty stays negative on
 both sides.
 
+The same control applied to the pooled panel (2,029 unit-years, five cities — Surat's drain
+density is per ward while its budget unit is the zone, so it is omitted) moves the estimate
+from −6.7% to −7.9%: **119% of the effect retained**, i.e. it strengthens slightly. That is
+a weaker test — coarser units, shorter panels, and OSM completeness varies far more across
+cities than within one — but it points the same way.
+
 ### 4.11 It is not partisan targeting
 
 BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 — matching

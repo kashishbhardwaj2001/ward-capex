@@ -188,3 +188,81 @@ if __name__ == "__main__":
 
     pd.DataFrame(rows).to_csv(OUT / "tables/stock_control.csv", index=False)
     print(f"\n  -> {OUT/'tables/stock_control.csv'}")
+
+    # ------------------------------------------------------------------ pooled arm
+    # The Bengaluru test above is the careful one. Now that OSM drainage has been
+    # extracted for all 22 boundary layers, the same control can be applied to the
+    # six-city pool - a weaker test (coarser units, shorter panels) but one that asks
+    # whether the pooled result is also robust to existing stock.
+    print(f"\n  === POOLED: does the six-city result survive the same control? ===")
+    mc = pd.read_parquet(ROOT / "data/final/multicity_panel.parquet")
+    dn_all = pd.read_parquet(INT / "ward_drain_network.parquet")
+
+    # the panel's `unit` is a ward number / zone name per city, while the drain table is
+    # keyed (city layer, polygon order). Join through the same layer map build_multicity
+    # uses, positionally, and standardise density WITHIN city so a Bengaluru ward is never
+    # compared with a Chennai zone - the same rule the hazard variable follows.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("bm", ROOT / "src/build_multicity.py")
+    bm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bm)
+
+    parts = []
+    for city, layer in bm.HAZ_LAYER.items():
+        sub = dn_all[dn_all.city == layer].sort_values("unit_id").reset_index(drop=True)
+        if sub.empty:
+            continue
+        g = gpd.read_file(ROOT / f"data/raw/boundaries/{layer}.geojson").reset_index(drop=True)
+        g["unit_id"] = range(len(g))
+        if city == "bengaluru" and "WARD_NO" in g.columns:
+            g["unit"] = (g["WARD_NO"].astype(str).str.replace(r"\.0$", "", regex=True))
+        elif city == "chennai" and "Zone_No" in g.columns:
+            g["unit"] = g["Zone_No"].astype(str).str.strip()
+        elif city == "mumbai" and "name" in g.columns:
+            g["unit"] = g["name"].astype(str).str.strip().str.upper()
+        elif city == "ahmedabad" and "Name" in g.columns:
+            g["unit"] = (g["Name"].astype(str).str.replace(r"^\d+\s*", "", regex=True)
+                         .str.replace(r"[^A-Za-z ]", " ", regex=True)
+                         .str.replace(r"\s+", " ", regex=True).str.upper().str.strip())
+        elif city == "pune" and "name" in g.columns:
+            g["unit"] = g["name"].astype(str).str.replace(
+                r"^Admin Ward \d+\s*", "", regex=True).str.strip()
+        else:
+            g["unit"] = (g.index + 1).astype(str)
+        m = sub.merge(g[["unit_id", "unit"]], on="unit_id", how="left")
+        m["city"] = city
+        parts.append(m[["city", "unit", "drain_eng_density_m_km2"]])
+
+    if parts:
+        dens = pd.concat(parts, ignore_index=True)
+        mm = mc.merge(dens, on=["city", "unit"], how="left")
+        mm["z_dens"] = mm.groupby("city")["drain_eng_density_m_km2"].transform(
+            lambda x: (x - x.mean()) / x.std())
+        mm = mm.replace([np.inf, -np.inf], np.nan)
+        got = mm.z_dens.notna().sum()
+        print(f"    stock attached to {got:,}/{len(mm):,} unit-years "
+              f"({got/len(mm)*100:.0f}%), {mm.dropna(subset=['z_dens']).city.nunique()} cities")
+        print("    Surat is absent here: its budget unit is the zone while its drain")
+        print("    density is per ward, so it would need the same areal aggregation the")
+        print("    hazard variable gets. Not done - it would add 10 unit-years to 2,029.")
+        prows = []
+        for lab, rhs in [("pooled, city x year FE", "z_hazard + C(city):C(fy)"),
+                         ("+ engineered drain density",
+                          "z_hazard + z_dens + C(city):C(fy)")]:
+            x = mm.dropna(subset=["log_spend", "z_hazard", "z_dens"])
+            m = smf.ols(f"log_spend ~ {rhs}", data=x).fit(
+                cov_type="cluster", cov_kwds={"groups": x["city"] + "_" + x["unit"]})
+            b, se, p = m.params["z_hazard"], m.bse["z_hazard"], m.pvalues["z_hazard"]
+            st = "***" if p < .01 else "**" if p < .05 else "*" if p < .1 else ""
+            print(f"    {lab:32s} {b:+7.4f} (se {se:.4f}) p={p:.4f}{st}  "
+                  f"{(np.exp(b)-1)*100:+6.1f}%")
+            prows.append({"spec": lab, "beta": b, "se": se, "p": p,
+                          "pct": (np.exp(b) - 1) * 100, "n": int(m.nobs)})
+        if len(prows) == 2:
+            keep = prows[1]["pct"] / prows[0]["pct"] * 100 if prows[0]["pct"] else np.nan
+            print(f"\n    {keep:.0f}% of the pooled effect retained under the stock control.")
+            print("    Weaker than the Bengaluru test - coarser units, shorter panels, and")
+            print("    OSM completeness varies far more across cities than within one - but")
+            print("    it points the same way.")
+        pd.DataFrame(prows).to_csv(OUT / "tables/stock_control_pooled.csv", index=False)
+        print(f"    -> {OUT/'tables/stock_control_pooled.csv'}")

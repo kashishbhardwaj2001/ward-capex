@@ -20,8 +20,23 @@ effect wins: flood-prone wards end up spending **9.0% less on drainage in absolu
 The misallocation therefore sits one level above where climate-budget-tagging looks. An
 exercise auditing the drainage line would find Bengaluru's engineers prioritising
 correctly. The problem is only visible in the denominator. The pattern repeats with the
-same sign in Chennai, Pune and Ahmedabad but **not in Mumbai or Surat**, both of which are too coarsely reported to resolve within-city hazard, and flood hazard is positively correlated with a ward's
-SC/ST population share (r = +0.23), giving the gap an equity dimension.
+same sign in Chennai, Pune and Ahmedabad but **not in Mumbai or Surat**, both of which are
+too coarsely reported to resolve within-city hazard, and flood hazard is positively
+correlated with a ward's SC/ST population share (r = +0.23), giving the gap an equity
+dimension.
+
+Three tests narrow what else could produce it. A **coefficient-contrast test** shows the
+within-budget tilt toward drainage is statistically indistinguishable from the tilt toward
+roads or parks (0 of 5 contrasts significant) — high-hazard wards favour outdoor civil works
+generally, not flood protection, which closes the reading that wards protect themselves with
+whatever money they have. A **ward fixed-effects arm** on time-varying CHIRPS rainfall finds
+no within-ward reallocation when a ward has an unusually wet year, ruling out a fixed ward
+characteristic correlated with terrain; it also shows why levels cannot be read here at all,
+since a wet year suppresses the *number* of work orders (−0.55, p = 0.001) and cuts street
+lighting and buildings harder than drainage — construction throughput, not budgeting.
+Finally, controlling for the **existing drainage stock** (660 km of mapped line-work) leaves
+87% of the effect intact; the p-value weakens only because the control is collinear with
+hazard by construction.
 
 Two measurement findings are of independent interest: the measured "drainage share" of the
 budget varies **35-fold** across three defensible keyword definitions, and **27% of
@@ -486,18 +501,40 @@ significant; the magnitude is what moves.
 3. **HAND is a proxy.** No free hydraulic pluvial model exists for Indian cities. HAND
    captures topographic susceptibility, not drainage capacity, rainfall intensity or
    blockage — the proximate causes of urban flooding.
-4. **Work orders are payments, not budgets.** Arguably better, but not an allocation
-   decision.
+4. **Work orders are payments, not budgets.** Arguably better — they are what was actually
+   spent — but not an allocation decision. §4.9 shows this is not a theoretical worry: a
+   wet year suppresses the *number* of work orders (−0.55, p = 0.001), so rainfall shocks
+   move executed spending through construction throughput regardless of any budget
+   response. Level specifications on time-varying rainfall are uninterpretable for that
+   reason, and only the share is used.
 4b. **Classifier measures bundled work.** Hand-adjudicating 300 orders: the medium tier has
    100% precision and 98.1% recall, but **80% of what it flags is bundled "roads and
    drains"** where the full amount is charged to drainage. The narrow tier is clean but
    recovers only 6.5% of genuine drainage orders. Under the narrow definition the hazard
    effect on drainage share is **significantly positive** (+0.445 pp, p = 0.013 with Conley
    spatial SEs) — dedicated stormwater assets do track hazard; bundled road money does not.
-5. **Depth varies by city.** Bengaluru carries the decomposition; Chennai, Pune and
-   Ahmedabad contribute the reduced form at coarser units (zones, ward offices) and
-   shorter panels. Surat's spending was extracted but could not be joined — its published
-   polygons are 30 wards while its budget reports 9 zones, and no crosswalk is published.
+5. **Depth varies by city, and the two non-replications are the coarsest panels.**
+   Bengaluru carries the decomposition with 198 wards and a within-city hazard SD of 0.149.
+   Chennai, Pune and Ahmedabad contribute the reduced form at coarser units (zones, ward
+   offices) over shorter panels. Surat is joined via a purpose-built ward→zone crosswalk,
+   but its budget reports only 10 zones, leaving a hazard SD of 0.050 — the most spatially
+   smoothed of the six; Mumbai publishes budget *estimates* across 24 wards. Both run
+   positive and neither is distinguishable from zero. Where the reporting unit is coarse
+   enough, within-city hazard variation is averaged away before it can be related to
+   anything, so these are uninformative rather than contradicting. The pooled estimate
+   should be read as summarising the four cities that can resolve the question.
+5b. **The stock control is OpenStreetMap, with the measurement error that implies.** OSM
+   mapping effort tracks affluence and centrality, so mapped drain density overstates the
+   stock in rich central wards. That bias runs *toward* the rival explanation, which is why
+   the control is usable — but a purpose-built municipal drainage GIS would be better, and
+   none is published. Part of the hazard–stock correlation is also mechanical, since HAND
+   is derived from terrain-implied drainage and OSM's natural watercourses follow the same
+   topography; the control therefore uses engineered line-work only (§4.10).
+5c. **CHIRPS resolves neighbourhoods, not wards.** At 0.05° (~5.5 km) Bengaluru's 198 wards
+   occupy roughly 60–70 distinct pixels, and wards sharing a pixel have identical rainfall
+   by construction. After ward and year fixed effects only 39% of the rainfall variation
+   survives, so the within-ward null in §4.9 is **moderate evidence, not strong** — a real
+   but modest reallocation could be missed.
 6. **Hazard validation passed but is moderate.** Spearman ρ = +0.26 against 395 official
    BBMP/KSNDMC flood points, with a clean monotonic quartile gradient (§4.8). Good enough
    to proceed; not a hydraulic model.

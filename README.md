@@ -76,7 +76,7 @@ the hazard variable cannot find known floods.
 
 ## What is built
 
-- **82,287 BBMP work orders**, FY2011–2026, ward-tagged and classified into three drainage
+- **82,219 BBMP work orders**, FY2011–2026, ward-tagged and classified into three drainage
   definitions
 - **2,157 sub-city units across 22 boundary layers** with hazard, terrain and drainage-stock
   indicators
@@ -87,7 +87,7 @@ the hazard variable cannot find known floods.
 
 ### Three findings about measurement
 
-1. **The tagging elasticity is ~6×.** The same corpus is 8.1% or 49.3% "drainage" depending
+1. **The tagging elasticity is 35×.** The same ₹23,081 crore is 1.3% or 45.9% "drainage" depending
    on which of three defensible keyword definitions you use. Reported as a headline result,
    not a footnote — 300 hand-adjudicated orders show the medium tier is 100% precise but
    **80% of what it catches is bundled road-and-drain work**.

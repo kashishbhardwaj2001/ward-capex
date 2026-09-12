@@ -1,6 +1,6 @@
 # Does the Drainage Money Follow the Flood Risk?
 
-### Ward-level evidence from 68,635 municipal work orders in Bengaluru
+### Ward-level evidence from 68,415 municipal work orders in Bengaluru
 
 ---
 
@@ -8,8 +8,8 @@
 
 Cities in low- and middle-income countries are told to invest in climate resilience, but
 whether municipal capital actually reaches the places most exposed to hazard has never
-been tested below the city level. Using 68,635 ward-tagged capital work orders from the
-Bruhat Bengaluru Mahanagara Palike (₹23,132 crore, FY2013–2022) joined to a 30 m
+been tested below the city level. Using 68,415 ward-tagged capital work orders from the
+Bruhat Bengaluru Mahanagara Palike (₹23,081 crore, FY2013–2022) joined to a 30 m
 terrain-derived flood-hazard surface for all 198 wards, I find that **flood-prone wards
 receive systematically smaller capital budgets** — 12.8% less per standard deviation of
 hazard (p < 0.0001) — while allocating a modestly *higher* share of what they get to
@@ -20,11 +20,11 @@ effect wins: flood-prone wards end up spending **9.0% less on drainage in absolu
 The misallocation therefore sits one level above where climate-budget-tagging looks. An
 exercise auditing the drainage line would find Bengaluru's engineers prioritising
 correctly. The problem is only visible in the denominator. The pattern repeats with the
-same sign in Chennai, Pune and Ahmedabad but **not in Mumbai**, and flood hazard is positively correlated with a ward's
+same sign in Chennai, Pune and Ahmedabad but **not in Mumbai or Surat**, both of which are too coarsely reported to resolve within-city hazard, and flood hazard is positively correlated with a ward's
 SC/ST population share (r = +0.23), giving the gap an equity dimension.
 
 Two measurement findings are of independent interest: the measured "drainage share" of the
-budget varies **29-fold** across three defensible keyword definitions, and **27% of
+budget varies **35-fold** across three defensible keyword definitions, and **27% of
 drainage spending cannot be assigned to any ward** in BBMP's own categorisation — the
 highest of any category — because trunk drains span wards by construction.
 
@@ -51,7 +51,7 @@ hazard measure must therefore be terrain-derived.
 
 | Component | Source | Detail |
 |---|---|---|
-| Capital spending | BBMP Works Bill Public View, via OpenCity CKAN | 68,635 ward-tagged orders, ₹23,132 Cr, FY2013–2022 |
+| Capital spending | BBMP Works Bill Public View, via OpenCity CKAN | 68,415 ward-tagged orders, ₹23,081 Cr, FY2013–2022 |
 | Ward boundaries | DataMeet, BBMP 2012 delimitation | 198 wards |
 | Flood hazard | Copernicus DEM GLO-30 → HAND | share of ward below 5 m above nearest drainage |
 | Controls | 2011 Census on ward polygons | population, density, SC/ST share, area |
@@ -73,11 +73,11 @@ reported as a result, not hidden.
 
 | Tier | Definition | Amount | Share of works budget |
 |---|---|---|---|
-| Narrow | stormwater, SWD, rajakaluve, nala only | ₹303 Cr | **1.3%** |
-| Medium | + drain, kaluve, desilt, culvert | ₹10,386 Cr | **44.9%** |
-| Broad | + road-and-drain, footpath drain | ₹10,632 Cr | **46.0%** |
+| Narrow | stormwater, SWD, rajakaluve, nala only | ₹301 Cr | **1.3%** |
+| Medium | + drain, kaluve, desilt, culvert | ₹10,355 Cr | **44.9%** |
+| Broad | + road-and-drain, footpath drain | ₹10,600 Cr | **45.9%** |
 
-**A 29-fold difference** in the measured drainage share of an identical budget, from three
+**A 35-fold difference** in the measured drainage share of an identical budget, from three
 defensible readings of the same text. Any single-number claim about "how much a city
 spends on drainage" is a statement about the analyst's keyword list as much as about the
 city. The medium tier is used throughout; results are reported for all three.
@@ -108,33 +108,46 @@ effects, ward area, population, density and distance from the centre.
 
 #### Replication across cities
 
-Pooled across **five cities — Bengaluru, Ahmedabad, Chennai, Pune and Mumbai**
-(2,029 unit-years, 273 sub-city units, ₹16,519 crore), with city fixed effects and hazard standardised
-*within* city so a ward is never compared to a zone:
+Pooled across **six cities — Bengaluru, Ahmedabad, Chennai, Pune, Mumbai and Surat**
+(2,088 unit-years, 283 sub-city units, ₹16,792 crore), with city fixed effects and hazard
+standardised *within* city so a ward is never compared to a zone:
 
 | Specification | β | p | Effect |
 |---|---|---|---|
-| City FE | −0.105 | 0.006 | −9.9% per SD |
-| City + year FE | −0.093 | 0.012 | −8.9% per SD |
-| City × year FE | −0.090 | 0.017 | −8.6% per SD |
+| City FE | −0.101 | 0.007 | −9.6% per SD |
+| City + year FE | −0.090 | 0.014 | −8.6% per SD |
+| City × year FE | −0.088 | 0.018 | −8.4% per SD |
 
 Per city:
 
 | City | Units | Unit-years | β | p | Effect |
 |---|---|---|---|---|---|
-| Bengaluru | 198 | 1,722 | −0.125 | 0.002 | −11.8% |
-| Chennai | 15 | 90 | −0.225 | 0.095 | −20.1% |
-| Pune | 7 | 46 | −0.167 | 0.052 | −15.4% |
-| Ahmedabad | 29 | 107 | −0.158 | 0.325 | −14.6% |
-| **Mumbai** | 24 | 64 | **+0.237** | 0.442 | **+26.8%** |
+| Chennai | 15 zones | 90 | −0.225 | 0.095 | −20.1% |
+| Pune | 7 wards | 46 | −0.167 | 0.052 | −15.4% |
+| Ahmedabad | 29 wards | 107 | −0.158 | 0.325 | −14.6% |
+| Bengaluru | 198 wards | 1,722 | −0.125 | 0.002 | −11.7% |
+| **Mumbai** | 24 wards | 64 | **+0.237** | 0.442 | **+26.8%** |
+| **Surat** | 10 zones | 59 | **+0.377** | 0.272 | **+45.9%** |
 
-**Negative in four of five cities**, significant in three. **Mumbai runs the other way** —
-positive, though far from significant, with a standard error three times the pooled effect.
+**Negative in four of six cities**, significant in three. The two positive cities run the
+other way but **neither is statistically distinguishable from zero** — Mumbai's standard
+error is three times the pooled effect and Surat's is larger still.
+
+The two non-replications share a structural feature that is worth stating plainly rather
+than treating as coincidence: **both are the coarsest and smallest panels in the set.**
+Bengaluru contributes 198 wards with a within-city hazard SD of 0.149; Surat contributes
+10 zones with an SD of 0.050, the most spatially smoothed of the six, because its budget
+reports by zone and its hazard has to be aggregated *up* from 30 ward polygons through an
+areal crosswalk. Mumbai contributes 24 wards of budget *estimates* rather than audited
+actuals. Where the unit is coarse enough, within-city hazard variation is largely averaged
+away before it can be related to anything, and the estimate is uninformative in either
+direction. That is a limitation of the available disclosure, not a finding about those two
+cities.
 
 #### Mumbai does not replicate, and the paper says so
 
 Mumbai is the only city besides Bengaluru publishing *both* stormwater and total ward
-capital, so it is the one independent test of the decomposition. It fails:
+capital, so it is the one independent test of the full decomposition. It fails:
 
 | Step | β | p |
 |---|---|---|
@@ -150,6 +163,13 @@ MCGM's portal — they are not published through any navigable index); and its S
 extremely noisy (mean 5.4%, SD 16.1). Mumbai is best read as uninformative rather than as
 contradicting Bengaluru — but it is not supporting evidence, and it is reported here rather
 than dropped.
+
+The honest summary of the multi-city evidence is therefore narrower than "it replicates":
+the result is **established in Bengaluru**, where the data are ward-level, audited and
+long-running; it is **directionally consistent in three further cities**, two of them at
+conventional significance; and it is **untestable at present in two**, whose disclosure is
+too coarse to resolve within-city hazard at all. The pooled estimate should be read as a
+summary of the first four, not as evidence about the last two.
 
 #### An equity dimension
 
@@ -173,29 +193,81 @@ but the hurdle is modelled anyway:
 
 ### 4.3 Falsification
 
-Flood hazard should predict drainage spending and nothing else. All coefficients are pp
-per SD of hazard under the full specification.
+The original design was **hazard-side**: drainage should respond to flood hazard, parks to
+heat hazard, and each should ignore the other's. It appeared to fail — drainage tracked
+"heat" more strongly than flood. **The test was broken, not the finding.** CCKP's `hd35`
+takes six distinct values across 198 wards (CV 2.5%); at ward scale it is a dummy for which
+0.25° cell a ward sits in, and z-scoring a step function manufactures apparent signal. It
+cannot falsify anything. This is the paper's own scale critique surfacing inside its
+analysis, and it is the reason the test was rebuilt on the **outcome side**, where every
+variable comes from the same ward-tagged work-order text and varies properly.
+
+All coefficients are pp per SD of hazard under the full specification.
 
 | Category | β | p | Expectation | Result |
 |---|---|---|---|---|
-| **drainage** | +1.73 | 0.298 | positive | **not significant** |
+| **drainage** | +1.73 | 0.298 | positive | not significant |
 | buildings | +0.28 | 0.788 | ~0 | ✅ |
 | street lighting | −0.40 | 0.169 | ~0 | ✅ |
 | water supply | −0.62 | 0.290 | ~0 | ✅ |
 | parks | +2.13 | 0.096 | ~0 | ~ marginal |
-| **roads** | **+2.62** | **0.049** | ambiguous | **significant** |
+| roads | +2.62 | 0.049 | ambiguous | significant |
 
 **All four clean placebos behave correctly**, which supports the hazard measure: it is not
-spuriously correlated with spending in general. But the only category that significantly
-tracks flood hazard is **roads**, not drainage.
+spuriously correlated with spending in general.
 
-### 4.4 The roads finding
+#### 4.3.1 The test that discriminates
 
-Indian municipal road works routinely bundle side drains, kerb channels and culverts. The
-result suggests that in flood-prone Bengaluru wards, drainage investment is delivered
-*through the road budget* rather than the drainage budget. If so, any study — or any
-climate-budget-tagging exercise — that counts only the drainage line will systematically
-undercount resilience investment in exactly the places doing it.
+Reading that table row by row invites the wrong question. Once the decomposition has located
+the effect in the *total budget*, what matters is not whether drainage is positive but
+whether the within-budget tilt is **drainage-specific**. Two stories predict different
+things:
+
+- *flood-targeting* — drainage's coefficient is significantly **larger** than the placebos':
+  wards protect themselves within whatever budget they get;
+- *generic civil works* — drainage moves with roads and parks and is **not distinguishable**
+  from them: the tilt reflects what kind of land a low-lying ward has, not a flood response.
+
+Estimated as a Wald test on the coefficient difference, stacking each pair of shares on the
+same ward sample so the covariance is available (`src/analyse_falsification.py`):
+
+| drainage vs | difference | se | p |
+|---|---|---|---|
+| buildings | +2.47 | 1.85 | 0.182 |
+| street lighting | +1.40 | 1.38 | 0.309 |
+| water supply | +1.37 | 1.47 | 0.350 |
+| parks | −0.29 | 1.89 | 0.876 |
+| roads | −0.92 | 1.32 | 0.485 |
+
+**Zero of five contrasts are significant.** There is no drainage-specific targeting: the
+composition tilt in high-hazard wards runs toward **outdoor civil works generally** — roads
++2.6 pp, parks +2.1 pp, drainage +1.7 pp — and away from buildings, lighting and water
+supply. That is the pattern one expects of low-lying, less-built-up land, not of a flood
+response.
+
+This sharpens the headline rather than contradicting it. The headline is that flood hazard
+predicts a **smaller total budget** (−12.8%); this test adds that there is **no
+drainage-specific compensation inside that smaller budget**. Both halves point the same way.
+
+It also closes the most damaging alternative reading of the +1.61 pp share result in §4.1.
+On its own, that coefficient can be told as *"wards do protect themselves, they just have
+less money to do it with."* They do not. The share moves because the whole outdoor-works
+basket moves.
+
+### 4.4 The roads finding, stated at the strength the evidence supports
+
+Indian municipal road works routinely bundle side drains, kerb channels and culverts, and
+roads is the only category significant on its own (+2.62 pp, p = 0.049). The natural story
+is that in flood-prone wards drainage investment is delivered *through the road budget*.
+
+The contrast test in §4.3.1 does not support the strong version of that claim: roads is not
+significantly different from drainage (p = 0.485), so the data cannot distinguish "drainage
+hides in roads" from "low-lying wards get more outdoor civil works of every kind". What
+survives is the weaker and still consequential point, which the classifier validation
+reaches independently: **80% of the money the medium tier tags as drainage is bundled
+road-and-drain work**. Whatever the mechanism, any study — or any climate-budget-tagging
+exercise — that counts only the drainage line will mis-measure resilience investment,
+because the line item and the physical asset do not correspond.
 
 ### 4.5 The alignment gap
 
@@ -257,6 +329,30 @@ more defensible claim than no alignment at all.
 
 ---
 
+### 4.8 Hazard validation against official flood records
+
+The hazard surface is validated against 395 geocoded flood locations compiled by BBMP with
+the Karnataka State Natural Disaster Monitoring Centre (200 flood-vulnerable, 70
+flood-prone, 129 low-lying), covering 148 of 198 wards.
+
+| Modelled hazard quartile | Wards | Flood points | Points per km² |
+|---|---|---|---|
+| Q1 (lowest) | 50 | 64 | 0.751 |
+| Q2 | 49 | 93 | 0.859 |
+| Q3 | 49 | 111 | 1.208 |
+| **Q4 (highest)** | 50 | 127 | **1.356** |
+
+Monotonically increasing, with **1.81× the flood-point density** in the top hazard
+quartile versus the bottom (Spearman ρ = +0.26, Pearson r = +0.21). Elevation runs the
+other way, as it should (ρ = −0.16).
+
+The correlation is moderate rather than strong, which is the expected result: HAND measures
+topographic susceptibility, not drainage capacity, blockage or rainfall intensity — the
+proximate causes of urban flooding. It is sufficient to establish that the hazard variable
+is measuring something real, which is what the study requires.
+
+---
+
 ### 4.9 It is not partisan targeting
 
 BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 — matching
@@ -287,30 +383,6 @@ the coefficient to **−8.0%**, still significant at 1–5%. The honest range fo
 penalty is therefore **−8% to −13% per standard deviation of hazard**, depending on how
 much terrain is absorbed into the controls. Every specification is negative and
 significant; the magnitude is what moves.
-
-### 4.8 Hazard validation against official flood records
-
-The hazard surface is validated against 395 geocoded flood locations compiled by BBMP with
-the Karnataka State Natural Disaster Monitoring Centre (200 flood-vulnerable, 70
-flood-prone, 129 low-lying), covering 148 of 198 wards.
-
-| Modelled hazard quartile | Wards | Flood points | Points per km² |
-|---|---|---|---|
-| Q1 (lowest) | 50 | 64 | 0.751 |
-| Q2 | 49 | 93 | 0.859 |
-| Q3 | 49 | 111 | 1.208 |
-| **Q4 (highest)** | 50 | 127 | **1.356** |
-
-Monotonically increasing, with **1.81× the flood-point density** in the top hazard
-quartile versus the bottom (Spearman ρ = +0.26, Pearson r = +0.21). Elevation runs the
-other way, as it should (ρ = −0.16).
-
-The correlation is moderate rather than strong, which is the expected result: HAND measures
-topographic susceptibility, not drainage capacity, blockage or rainfall intensity — the
-proximate causes of urban flooding. It is sufficient to establish that the hazard variable
-is measuring something real, which is what the study requires.
-
----
 
 ## 5. Limitations
 

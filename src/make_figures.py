@@ -169,6 +169,84 @@ def fig6_scale():
     plt.close(fig)
 
 
+def fig7_budget_channel():
+    """The headline: hazard cuts the budget, not the drainage priority."""
+    import statsmodels.formula.api as smf
+    d = pd.read_parquet(ROOT / "data/final/bengaluru_budget_panel.parquet")
+    CTRL = "log_area + log_pop + z_log_density + z_dist_centre_km"
+    steps = [("Total ward\nbudget", f"log_total ~ z_hazard + {CTRL} + C(fy)", True),
+             ("Stormwater\nspend", f"log_storm ~ z_hazard + {CTRL} + C(fy)", True),
+             ("Stormwater,\nbudget controlled",
+              f"log_storm ~ z_hazard + log_total + {CTRL} + C(fy)", True)]
+    labs, bs, los, his = [], [], [], []
+    for lab, f, _ in steps:
+        r = smf.ols(f, data=d).fit(cov_type="cluster", cov_kwds={"groups": d["unit"]})
+        b, se = r.params["z_hazard"], r.bse["z_hazard"]
+        labs.append(lab)
+        bs.append((np.exp(b) - 1) * 100)
+        los.append((np.exp(b - 1.96 * se) - 1) * 100)
+        his.append((np.exp(b + 1.96 * se) - 1) * 100)
+
+    fig, ax = plt.subplots(figsize=(7.6, 4.6))
+    y = np.arange(len(labs))
+    cols = [MONEY, "#c76b78", MUTED]
+    for i in range(len(labs)):
+        ax.plot([los[i], his[i]], [y[i], y[i]], color=MUTED, lw=2, zorder=2)
+        ax.plot(bs[i], y[i], "o", ms=11, color=cols[i], zorder=3)
+        ax.annotate(f"{bs[i]:+.1f}%", (bs[i], y[i]), xytext=(0, 13),
+                    textcoords="offset points", ha="center", fontsize=9,
+                    fontweight="bold")
+    ax.axvline(0, color=INK, lw=.9, ls="--")
+    ax.set_yticks(y)
+    ax.set_yticklabels(labs, fontsize=9)
+    ax.invert_yaxis()
+    ax.set_xlabel("Change per 1 SD more flood hazard (%, 95% CI)")
+    ax.set_title("Flood-prone wards get smaller budgets — not lower drainage priority",
+                 fontweight="bold", loc="left", pad=16)
+    ax.set_ylim(len(labs) - 0.4, -0.75)
+    fig.text(.99, .01, "Bengaluru, 198 wards, FY2013–2022 · ward-clustered SE, year FE",
+             ha="right", size=7.5, color=MUTED)
+    fig.tight_layout()
+    fig.savefig(FIG / "F7_budget_channel.png", bbox_inches="tight")
+    plt.close(fig)
+
+
+def fig8_validation():
+    """Stop-or-go: modelled hazard vs 395 official BBMP/KSNDMC flood points."""
+    w = pd.read_csv(ROOT / "output/tables/hazard_validation.csv")
+    w["q"] = pd.qcut(w.hand_lt5m_share, 4, labels=["Q1\nlowest", "Q2", "Q3", "Q4\nhighest"])
+    g = w.groupby("q", observed=True).agg(d=("pts_per_km2", "mean"),
+                                          n=("n_flood_pts", "sum"))
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 4.2),
+                                 gridspec_kw={"width_ratios": [1, 1.15]})
+    a1.bar(range(len(g)), g.d, color=[ "#c9d7e8", "#91b2d6", "#5a8ac0", FLOOD], width=.68)
+    for i, (d, n) in enumerate(zip(g.d, g.n)):
+        a1.text(i, d + .03, f"{d:.2f}\n({int(n)} pts)", ha="center", size=8)
+    a1.set_xticks(range(len(g)))
+    a1.set_xticklabels(g.index, fontsize=8)
+    a1.set_ylabel("observed flood points per km²")
+    a1.set_title("Modelled hazard quartile", fontweight="bold", loc="left", fontsize=10)
+    a1.set_ylim(0, g.d.max() * 1.32)
+
+    a2.scatter(w.hand_lt5m_share, w.pts_per_km2, s=24, c=FLOOD, alpha=.55,
+               edgecolor="white", linewidth=.4)
+    b, aa = np.polyfit(w.hand_lt5m_share, w.pts_per_km2, 1)
+    xs = np.linspace(w.hand_lt5m_share.min(), w.hand_lt5m_share.max(), 40)
+    a2.plot(xs, aa + b * xs, color=INK, lw=1.3)
+    rs = w.hand_lt5m_share.corr(w.pts_per_km2, method="spearman")
+    a2.set_xlabel("modelled flood hazard (HAND < 5 m share)")
+    a2.set_ylabel("observed flood points per km²")
+    a2.set_title(f"Spearman ρ = {rs:+.2f}", fontweight="bold", loc="left", fontsize=10)
+    fig.suptitle("The hazard model finds Bengaluru's real flood spots",
+                 x=.02, ha="left", fontweight="bold", fontsize=12.5)
+    fig.text(.02, .005, "395 official flood-vulnerable, flood-prone and low-lying "
+             "locations compiled by BBMP with KSNDMC, across 148 wards.",
+             size=7.5, color=MUTED)
+    fig.tight_layout(rect=[0, .04, 1, .93])
+    fig.savefig(FIG / "F8_hazard_validation.png", bbox_inches="tight")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     gdf = load()
     fig1_maps(gdf); print("  F1 hazard vs spending maps")
@@ -177,4 +255,6 @@ if __name__ == "__main__":
     fig4_falsification(); print("  F4 falsification")
     fig5_tagging(); print("  F5 tagging elasticity")
     fig6_scale(); print("  F6 scale problem")
+    fig7_budget_channel(); print("  F7 budget channel")
+    fig8_validation(); print("  F8 hazard validation")
     print(f"\n  -> {FIG}")

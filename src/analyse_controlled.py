@@ -107,9 +107,26 @@ if __name__ == "__main__":
 
     d_f = [r for r in fals if r["outcome"] == "drainage" and r["hazard"] == "flood"][0]
     d_h = [r for r in fals if r["outcome"] == "drainage" and r["hazard"] == "heat"][0]
-    passed = abs(d_f["beta"]) > abs(d_h["beta"]) and d_f["beta"] > 0
-    print(f"\n    >>> FALSIFICATION {'PASSES' if passed else 'STILL FAILS'}: "
-          f"|flood|={abs(d_f['beta']):.2f} vs |heat|={abs(d_h['beta']):.2f}")
+
+    # DO NOT READ A VERDICT OFF THIS COMPARISON. The heat arm uses CCKP hd35, which takes
+    # six distinct values across 198 wards (CV 2.5%) because the grid is 0.25 deg. At ward
+    # scale it is a coarse spatial dummy, not heat, and z-scoring a step function
+    # manufactures apparent signal that will absorb any spatial gradient it is placed next
+    # to - including a real one. It can neither pass nor fail a falsification test.
+    #
+    # This block is kept because the comparison is evidence FOR that claim: heat "beats"
+    # flood here precisely because the heat variable is picking up geography rather than
+    # climate. The valid test runs outcome-side in analyse_falsification.py, where every
+    # variable comes from the same ward-tagged work-order text and varies properly.
+    heat = pd.read_parquet(ROOT / "data/final/bengaluru_panel.parquet")["hot_days_35c"]
+    print(f"\n    >>> NOT A VERDICT. |flood|={abs(d_f['beta']):.2f} vs "
+          f"|heat|={abs(d_h['beta']):.2f}, and heat appears to 'win' -")
+    print(f"        but CCKP hd35 has only {heat.round(4).nunique()} distinct values across "
+          f"{len(heat)} wards")
+    print(f"        (CV {heat.std()/abs(heat.mean())*100:.1f}%). It is a 0.25 deg spatial dummy, "
+          f"not a ward-scale")
+    print(f"        hazard, so this comparison cannot falsify anything. See")
+    print(f"        analyse_falsification.py for the valid outcome-side test.")
 
     pd.DataFrame(rows).to_csv(OUT / "tables/controlled_specs.csv", index=False)
     pd.DataFrame(fals).to_csv(OUT / "tables/falsification_controlled.csv", index=False)

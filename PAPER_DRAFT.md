@@ -396,7 +396,53 @@ establish is what the cross-section could not — the headline is not an artefac
 ward characteristic correlated with terrain. Within a single ward, with everything fixed
 about it held constant, the hazard moves and the allocation does not follow.
 
-### 4.10 It is not partisan targeting
+### 4.10 The existing-stock explanation, tested and rejected
+
+The most serious innocent reading of the headline is a **stock** story: perhaps flood-prone
+wards were already given their drainage, so they rationally need less new capital now. If
+true, the misallocation is a well-functioning system that finished early.
+
+Testing it needs a measure of the drainage that already exists. BBMP's rajakaluve GIS is not
+open data and the state SDMA layers are PDF maps, so OpenStreetMap is the only free
+ward-resolution source: **660 km of mapped drainage line-work across Bengaluru's 198 wards**
+(568 km engineered), against BBMP's published ~842 km rajakaluve network. Nine wards have
+nothing mapped.
+
+Existing drainage is indeed concentrated where hazard is (Spearman ρ = +0.47 on engineered
+line-work) — which is what the stock story needs. Part of that correlation is *mechanical*
+and must be named: HAND is computed from the drainage network implied by the terrain, and
+OSM's `stream`/`river` ways follow the same topography, so the engineered-only measure is
+the one used as the control.
+
+| specification | β | se | p | effect |
+|---|---|---|---|---|
+| baseline, no stock control | −0.0814 | 0.0339 | 0.016 | −7.8% |
+| + drain density (linear) | −0.0704 | 0.0409 | 0.085 | −6.8% |
+| + engineered-only density | −0.0713 | 0.0401 | 0.075 | −6.9% |
+| + log density | −0.0623 | 0.0365 | 0.087 | −6.0% |
+| + density × hazard interaction | −0.0751 | 0.0411 | 0.068 | −7.2% |
+
+**The effect survives in magnitude — 87% of it — while the standard error widens 1.21×.**
+Reading the p-value alone (0.016 → 0.085) would mistake multicollinearity for the effect
+disappearing: the control correlates with hazard by construction, so it inflates the
+standard error while barely moving the coefficient.
+
+The stock story therefore does not account for the result, and the test was **biased in its
+favour**: OSM completeness tracks affluence and centrality, overstating the stock in exactly
+the wards the stock story needs it overstated in.
+
+Where the stock story earns partial credit is the split sample:
+
+| sample | effect | p |
+|---|---|---|
+| wards with below-median existing drainage | **−10.5%** | 0.045 |
+| wards with above-median existing drainage | −5.1% | 0.310 |
+
+The hazard penalty is roughly **twice as large where little drainage exists**. Existing
+infrastructure absorbs some of the gap; it does not close it. The penalty stays negative on
+both sides.
+
+### 4.11 It is not partisan targeting
 
 BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 — matching
 the published headline exactly); the council's term ended in September 2020 with no

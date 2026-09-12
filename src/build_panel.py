@@ -20,6 +20,7 @@ THREE THINGS THIS FILE GETS RIGHT, BECAUSE EACH ONE SILENTLY RUINS THE ANALYSIS:
    between them is a result about measurement, not an embarrassment to hide.
 """
 import glob
+import hashlib
 import re
 from pathlib import Path
 
@@ -135,7 +136,53 @@ def load_all():
     frames = []
 
     # --- 2013-2022: 198 per-ward CSVs; ward is in the filename and the wo num
-    for f in sorted(glob.glob(str(RAW / "bbmp-work-orders-by-ward-2013-2022/*.csv"))):
+    #
+    # DUPLICATE-FILE GUARD. BBMP published ward 21 (Hebbala) as a byte-identical copy of
+    # ward 22 (Vishwanath Nagenahalli) - same 222 rows, same job numbers ("022-20-000061"
+    # etc). Taken at face value this double-counts ward 22 (448 rows, Rs 102 Cr instead of
+    # 224 / Rs 51 Cr) AND invents drainage spending for a ward whose file is really ward
+    # 22's. Ward 21's 2013-2022 data was simply never published; the annual files do carry
+    # it, so ward 21 is present in the panel from FY2022 onward and missing before.
+    #
+    # The check is generic - hash the file, keep the first occurrence - so any future
+    # repeat of this publication error is caught rather than quietly absorbed. It is
+    # deliberately done at FILE level, not row level: a single job number legitimately
+    # appears on several rows (one per bill instalment, with distinct SBR/BR/CBR numbers),
+    # so row-level dedup would delete 3,240 real payment records.
+    # Which member of a duplicate pair to keep is not arbitrary: ward_name is taken from
+    # the FILENAME, so keeping the wrongly-labelled copy would file ward 22's works under
+    # the name "Hebbala". Keep the file whose filename ward number agrees with the job
+    # numbers inside it ("022-20-000061" -> ward 22), and drop the mislabelled twin.
+    files = sorted(glob.glob(str(RAW / "bbmp-work-orders-by-ward-2013-2022/*.csv")))
+    by_hash = {}
+    for f in files:
+        by_hash.setdefault(hashlib.md5(Path(f).read_bytes()).hexdigest(), []).append(f)
+    drop = set()
+    for h, fs in by_hash.items():
+        if len(fs) < 2:
+            continue
+        keep = None
+        for f in fs:
+            m = re.search(r"\(Num-(\d+)\)", Path(f).name)
+            d0 = read_ward_csv(f)
+            if m is None or d0 is None or d0.empty:
+                continue
+            inner = pd.to_numeric(
+                d0["wo num"].astype(str).str.extract(r"^(\d{1,3})-")[0], errors="coerce")
+            if inner.mode().size and int(inner.mode().iloc[0]) == int(m.group(1)):
+                keep = f
+                break
+        keep = keep or fs[0]
+        for f in fs:
+            if f != keep:
+                drop.add(f)
+                print(f"  !! {Path(f).name}\n     is byte-identical to "
+                      f"{Path(keep).name} - skipped (BBMP publication error; the job "
+                      f"numbers inside identify it as the latter)")
+
+    for f in files:
+        if f in drop:
+            continue
         d = read_ward_csv(f)
         if d is None or d.empty:
             continue

@@ -159,6 +159,9 @@ if __name__ == "__main__":
             g = g.set_crs(4326)
         g = g.to_crs(4326)
         minx, miny, maxx, maxy = g.total_bounds
+        if abs(minx) > 180 or abs(miny) > 90:      # mislabelled CRS (Web Mercator as 4326)
+            g = g.set_crs(3857, allow_override=True).to_crs(4326)
+            minx, miny, maxx, maxy = g.total_bounds
         if not (68 <= minx <= 98 and 6 <= miny <= 38) and (68 <= miny <= 98 and 6 <= minx <= 38):
             from shapely.ops import transform as st
             g["geometry"] = g.geometry.map(lambda gg: st(lambda x, y, z=None: (y, x), gg))

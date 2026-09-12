@@ -123,6 +123,7 @@ def surat():
     d = pd.read_csv(f)
     d = d[d["measure"].astype(str).str.contains("actual", case=False, na=False)]
     d["unit"] = d["zone"].astype(str)
+    d = d[~d["unit"].isin(SURAT_DROP)]        # HQ is a cost centre, not a geography
     d["fy"] = d["fy"].map(fy_to_int)
     d["storm_spend"] = pd.to_numeric(d["rs_lakh"], errors="coerce") * 1e5
     g = (d.dropna(subset=["unit", "fy"])
@@ -150,6 +151,25 @@ def ahmedabad():
     return g
 
 
+def mumbai():
+    """MCGM Ward Wise Books, recovered from an unlinked WebDAV folder tree on
+    portal.mcgm.gov.in. Budget ESTIMATES (not audited actuals) but they carry BOTH the
+    Storm Water Drains capital line AND ward total capital, which makes Mumbai the second
+    city where the budget decomposition can be run."""
+    f = ROOT / "data/raw/mumbai_ward_swd.csv"
+    if not f.exists():
+        return None
+    d = pd.read_csv(f)
+    d = d[d["measure"] == "swd_capital_be"].copy()
+    d["unit"] = d["ward"].astype(str).str.strip().str.upper()
+    d["fy"] = d["fy"].map(fy_to_int)
+    d["storm_spend"] = pd.to_numeric(d["amount_rs"], errors="coerce")
+    g = (d.dropna(subset=["unit", "fy", "storm_spend"])
+           .groupby(["unit", "fy"]).storm_spend.sum().reset_index())
+    g["city"] = "mumbai"
+    return g
+
+
 def bengaluru():
     wo = pd.read_parquet(INT / "bbmp_workorders.parquet")
     w = wo[(wo.ward.between(1, 198)) & (wo.fy.between(2013, 2022))]
@@ -160,11 +180,78 @@ def bengaluru():
     return g
 
 
-# Surat is deliberately excluded: its published polygons are 30 WARDS while its budget
-# reports by 9 ZONES, and no ward->zone crosswalk is published. Joining them would be a
-# guess, so the Surat spending panel is retained but left unjoined.
+# Surat's published polygons are 30 WARDS while its budget reports by 9 ZONES. It was
+# excluded until a ward->zone crosswalk could be constructed; one now exists
+# (data/raw/surat_ward_zone_weights.csv, built by sampling points inside each ward
+# polygon against SMC's published zone boundaries, area weights summing to 1 per ward),
+# so Surat is joined by aggregating ward hazard UP to the budget's zone unit.
+#
+# Direction matters: the budget unit is the zone, so the hazard must be coarsened to the
+# zone, never the budget disaggregated to wards. A zone's hazard is the area-weighted
+# mean of its constituent wards, weight = ward_area x (ward's area share in that zone).
 HAZ_LAYER = {"bengaluru": "bengaluru_198", "chennai": "chennai_zone",
-             "pune": "pune_admin", "ahmedabad": "ahmedabad"}
+             "pune": "pune_admin", "ahmedabad": "ahmedabad",
+             "mumbai": "mumbai"}
+
+# SMC split its old "South" zone into South-A / South-B / South-East / South-West. Early
+# budget books still report the undivided "South"; it is reconstructed as the union of
+# the four. "HQ" is a headquarters cost centre, not a geography, and is dropped.
+SURAT_LEGACY = {"South": ["South-A", "South-B", "South-East", "South-West"]}
+SURAT_DROP = {"HQ"}
+
+
+def surat_zone_hazard():
+    """Area-weighted aggregation of Surat's 30 ward polygons onto its 9 budget zones."""
+    wf = ROOT / "data/raw/surat_ward_zone_weights.csv"
+    if not wf.exists():
+        return None
+    w = pd.read_csv(wf)
+    haz = pd.read_parquet(INT / "ward_hazard.parquet")
+    ter = pd.read_parquet(INT / "ward_terrain.parquet")
+    h = haz.merge(ter, on=["city", "unit_id"], suffixes=("", "_t"))
+    sub = h[h.city == "surat"].copy()
+    if sub.empty:
+        return None
+    # ward_no is not carried on the pooled hazard table (it keeps only the attributes
+    # shared across all 22 source layers), so read it back off the polygon file. unit_id
+    # is polygon order, which is how build_hazard.py assigns it.
+    import geopandas as gpd
+    g = gpd.read_file(ROOT / "data/raw/boundaries/surat.geojson").reset_index(drop=True)
+    g["unit_id"] = range(len(g))
+    g["srt_ward"] = pd.to_numeric(g["wardcode"], errors="coerce")
+    sub = sub.merge(g[["unit_id", "srt_ward"]], on="unit_id", how="left")
+    if sub["srt_ward"].isna().all():
+        return None
+    # "zone" also collides - several boundary layers ship their own zone column - so
+    # rename BOTH crosswalk keys to srt_* before touching the pooled table.
+    w = w.rename(columns={"ward_no": "srt_ward", "zone": "srt_zone"})
+    m = w.merge(sub, on="srt_ward", how="inner", suffixes=("", "_haz"))
+    if m.empty:
+        return None
+    m["wt"] = m["area_km2"] * m["area_weight"]
+
+    COLS = ["hand_lt5m_share", "hand_m", "twi", "slope", "elev_m"]
+    def agg(gr):
+        out = {c: np.average(gr[c], weights=gr.wt) for c in COLS
+               if gr[c].notna().all() and gr.wt.sum() > 0}
+        out["area_km2"] = gr.wt.sum()
+        return pd.Series(out)
+    z = m.groupby("srt_zone").apply(agg).reset_index()
+
+    # reconstruct the pre-split "South"
+    for legacy, parts in SURAT_LEGACY.items():
+        pz = z[z.srt_zone.isin(parts)]
+        if len(pz) == len(parts):
+            row = {c: np.average(pz[c], weights=pz.area_km2) for c in COLS if c in pz}
+            row["srt_zone"] = legacy
+            row["area_km2"] = pz.area_km2.sum()
+            z = pd.concat([z, pd.DataFrame([row])], ignore_index=True)
+
+    z = z.rename(columns={"srt_zone": "unit"})
+    z["city"] = "surat"
+    print(f"    surat: 30 wards -> {len(z)} budget zones "
+          f"(incl. reconstructed {list(SURAT_LEGACY)})")
+    return z[["city", "unit"] + COLS + ["area_km2"]]
 
 
 def attach_hazard(panel):
@@ -184,6 +271,8 @@ def attach_hazard(panel):
             sub["unit"] = sub["WARD_NO"].astype(str).str.replace(r"\.0$", "", regex=True)
         elif city == "chennai" and "Zone_No" in sub.columns:
             sub["unit"] = sub["Zone_No"].astype(str).str.strip()
+        elif city == "mumbai" and "name" in sub.columns:
+            sub["unit"] = sub["name"].astype(str).str.strip().str.upper()
         elif city == "ahmedabad" and "Name" in sub.columns:
             # "48 RAMOL HATHIJAN" -> "RAMOL HATHIJAN"
             sub["unit"] = (sub["Name"].astype(str)
@@ -200,11 +289,15 @@ def attach_hazard(panel):
         rows.append(sub[["city_key", "unit", "hand_lt5m_share", "hand_m",
                          "twi", "slope", "elev_m", "area_km2"]])
     hz = pd.concat(rows, ignore_index=True).rename(columns={"city_key": "city"})
+    sz = surat_zone_hazard()
+    if sz is not None:
+        hz = pd.concat([hz, sz], ignore_index=True)
     return panel.merge(hz, on=["city", "unit"], how="inner")
 
 
 if __name__ == "__main__":
-    parts = [p for p in [bengaluru(), pune(), chennai(), surat(), ahmedabad()]
+    parts = [p for p in [bengaluru(), pune(), chennai(), surat(), ahmedabad(),
+                         mumbai()]
              if p is not None]
     panel = pd.concat(parts, ignore_index=True)
     panel = panel[panel.storm_spend > 0]

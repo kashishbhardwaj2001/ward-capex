@@ -19,8 +19,8 @@ effect wins: flood-prone wards end up spending **9.0% less on drainage in absolu
 
 The misallocation therefore sits one level above where climate-budget-tagging looks. An
 exercise auditing the drainage line would find Bengaluru's engineers prioritising
-correctly. The problem is only visible in the denominator. The pattern replicates with the
-same sign in Chennai and Pune, and flood hazard is positively correlated with a ward's
+correctly. The problem is only visible in the denominator. The pattern repeats with the
+same sign in Chennai, Pune and Ahmedabad but **not in Mumbai**, and flood hazard is positively correlated with a ward's
 SC/ST population share (r = +0.23), giving the gap an equity dimension.
 
 Two measurement findings are of independent interest: the measured "drainage share" of the
@@ -108,15 +108,15 @@ effects, ward area, population, density and distance from the centre.
 
 #### Replication across cities
 
-Pooled across **four cities — Bengaluru, Ahmedabad, Chennai and Pune** (1,965 unit-years,
-249 sub-city units, ₹13,607 crore), with city fixed effects and hazard standardised
+Pooled across **five cities — Bengaluru, Ahmedabad, Chennai, Pune and Mumbai**
+(2,029 unit-years, 273 sub-city units, ₹16,519 crore), with city fixed effects and hazard standardised
 *within* city so a ward is never compared to a zone:
 
 | Specification | β | p | Effect |
 |---|---|---|---|
-| City FE | −0.115 | 0.003 | −10.9% per SD |
-| City + year FE | −0.102 | 0.006 | −9.7% per SD |
-| City × year FE | −0.099 | 0.009 | −9.4% per SD |
+| City FE | −0.105 | 0.006 | −9.9% per SD |
+| City + year FE | −0.093 | 0.012 | −8.9% per SD |
+| City × year FE | −0.090 | 0.017 | −8.6% per SD |
 
 Per city:
 
@@ -126,10 +126,30 @@ Per city:
 | Chennai | 15 | 90 | −0.225 | 0.095 | −20.1% |
 | Pune | 7 | 46 | −0.167 | 0.052 | −15.4% |
 | Ahmedabad | 29 | 107 | −0.158 | 0.325 | −14.6% |
+| **Mumbai** | 24 | 64 | **+0.237** | 0.442 | **+26.8%** |
 
-**The sign is negative in all four cities**, and significant in three. Only Bengaluru
-publishes total ward budgets, so the decomposition above can only be run there; the other
-three show the reduced-form effect.
+**Negative in four of five cities**, significant in three. **Mumbai runs the other way** —
+positive, though far from significant, with a standard error three times the pooled effect.
+
+#### Mumbai does not replicate, and the paper says so
+
+Mumbai is the only city besides Bengaluru publishing *both* stormwater and total ward
+capital, so it is the one independent test of the decomposition. It fails:
+
+| Step | β | p |
+|---|---|---|
+| hazard → total ward capital | +0.042 | 0.713 |
+| hazard → SWD capital | +0.223 | 0.748 |
+| hazard → SWD, total controlled | +0.046 | 0.957 |
+| hazard → SWD share | +0.337 | 0.826 |
+
+Every coefficient is null with large standard errors. Three reasons not to over-read either
+direction: Mumbai has **24 wards to Bengaluru's 198**, so power is low; its figures are
+**budget estimates, not audited actuals** (recovered from an unlinked WebDAV folder tree on
+MCGM's portal — they are not published through any navigable index); and its SWD share is
+extremely noisy (mean 5.4%, SD 16.1). Mumbai is best read as uninformative rather than as
+contradicting Bengaluru — but it is not supporting evidence, and it is reported here rather
+than dropped.
 
 #### An equity dimension
 
@@ -237,6 +257,37 @@ more defensible claim than no alignment at all.
 
 ---
 
+### 4.9 It is not partisan targeting
+
+BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 — matching
+the published headline exactly); the council's term ended in September 2020 with no
+election since, so the 2015 assignment covers the panel. A ward is coded *aligned* when its
+corporator's party held the Karnataka state government that year (39% of ward-years).
+
+| Test | Result |
+|---|---|
+| Aligned with state ruling party → total budget | **+1.9%, p = 0.68** — no effect |
+| Flood hazard → total budget, no political control | −8.0%, p = 0.013 |
+| + aligned dummy | −8.1%, p = 0.013 |
+| + party fixed effects | −8.1%, **p = 0.009** |
+| + party × year fixed effects | −8.0%, p = 0.012 |
+
+**Alignment with the ruling party buys a ward nothing**, and the hazard penalty is
+completely unmoved by party controls. Whatever produces the budget gap, it is not partisan
+targeting of the governing party's own wards.
+
+Hazard is nonetheless politically distributed: opposition-held INC wards are more
+flood-prone (mean hazard z = +0.27) than BJP wards (−0.17), and the seven independents are
+the most exposed of all (+0.89).
+
+**An attenuation to state plainly.** The headline −12.8% is estimated controlling for ward
+area, population, density and distance from the centre. Adding **elevation and slope** —
+which are mechanically related to HAND, since all three derive from the same DEM — pulls
+the coefficient to **−8.0%**, still significant at 1–5%. The honest range for the budget
+penalty is therefore **−8% to −13% per standard deviation of hazard**, depending on how
+much terrain is absorbed into the controls. Every specification is negative and
+significant; the magnitude is what moves.
+
 ### 4.8 Hazard validation against official flood records
 
 The hazard surface is validated against 395 geocoded flood locations compiled by BBMP with
@@ -276,6 +327,12 @@ is measuring something real, which is what the study requires.
    blockage — the proximate causes of urban flooding.
 4. **Work orders are payments, not budgets.** Arguably better, but not an allocation
    decision.
+4b. **Classifier measures bundled work.** Hand-adjudicating 300 orders: the medium tier has
+   100% precision and 98.1% recall, but **80% of what it flags is bundled "roads and
+   drains"** where the full amount is charged to drainage. The narrow tier is clean but
+   recovers only 6.5% of genuine drainage orders. Under the narrow definition the hazard
+   effect on drainage share is **significantly positive** (+0.445 pp, p = 0.013 with Conley
+   spatial SEs) — dedicated stormwater assets do track hazard; bundled road money does not.
 5. **Depth varies by city.** Bengaluru carries the decomposition; Chennai, Pune and
    Ahmedabad contribute the reduced form at coarser units (zones, ward offices) and
    shorter panels. Surat's spending was extracted but could not be joined — its published

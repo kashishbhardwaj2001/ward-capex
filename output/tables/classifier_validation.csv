@@ -1,0 +1,4 @@
+tier,flagged,dedicated,bundled,false_positive,precision_any_drainage,precision_dedicated_only
+narrow,7,2,5,0,100.0,28.57142857142857
+medium,106,21,85,0,100.0,19.81132075471698
+broad,110,21,85,4,96.36363636363636,19.090909090909093

@@ -121,19 +121,30 @@ if __name__ == "__main__":
             g = g.set_crs(4326)
         g = g.to_crs(4326)
 
-        # COORDINATE SANITY CHECK. At least one published layer (Surat, from the
-        # bharatlas bucket) ships with lat/lon TRANSPOSED: its bounds read
-        # [21.06, 72.70, 21.32, 72.97] - latitude sitting in the longitude slot.
-        # Unchecked, every hazard value for that city is sampled from the wrong side
-        # of the planet and comes back as a plausible-looking small number.
-        # India spans roughly lon 68-98 E, lat 6-38 N.
+        # COORDINATE SANITY CHECKS. Published Indian boundary files carry two distinct
+        # defects that both yield plausible-looking but meaningless hazard values:
+        #
+        #  (a) TRANSPOSED lat/lon. Surat's bharatlas file has bounds
+        #      [21.06, 72.70, 21.32, 72.97] - latitude sitting in the longitude slot.
+        #  (b) MISLABELLED CRS. Kanpur's DataMeet file declares EPSG:4326 but its
+        #      coordinates are Web Mercator metres (bounds ~8.93e6, 3.04e6). Sampled as
+        #      degrees it lands off the globe and every indicator returns 0.0.
+        #
+        # India spans roughly lon 68-98 E, lat 6-38 N; anything far outside that is one of
+        # the two, not a real geography.
         minx, miny, maxx, maxy = g.total_bounds
+        if abs(minx) > 180 or abs(miny) > 90:
+            g = g.set_crs(3857, allow_override=True).to_crs(4326)
+            print(f"  {city:16s} !! CRS mislabelled - coords were Web Mercator, reprojected "
+                  f"({[round(v,2) for v in g.total_bounds]})")
+            minx, miny, maxx, maxy = g.total_bounds
         if not (68 <= minx <= 98 and 6 <= miny <= 38) and (68 <= miny <= 98 and 6 <= minx <= 38):
             from shapely.ops import transform as shp_transform
             g["geometry"] = g.geometry.map(
                 lambda gg: shp_transform(lambda x, y, z=None: (y, x), gg))
             print(f"  {city:16s} !! lat/lon were transposed - flipped "
                   f"({[round(v,2) for v in g.total_bounds]})")
+
 
         g["unit_id"] = range(len(g))
         g["city"] = city

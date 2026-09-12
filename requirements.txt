@@ -1,0 +1,25 @@
+# Pinned to the versions this analysis was actually run and validated on
+# (Python 3.12, macOS arm64). Two pins are load-bearing rather than cosmetic:
+#
+#   numpy>=2.0  removed np.in1d, which pysheds 0.5 still calls. src/build_terrain.py
+#               installs a shim BEFORE importing pysheds. If you unpin numpy below 2.0
+#               the shim is harmless; if you upgrade pysheds past 0.5, check it first.
+#   pandas 3.x  changed default string dtype to Arrow-backed. Several parsers here
+#               coerce explicitly with errors="coerce" for that reason.
+
+geopandas==1.1.4
+pandas==3.0.5
+numpy==2.5.3
+scipy==1.18.1
+statsmodels==0.15.0
+shapely==2.1.2
+rasterio==1.5.1
+pyogrio==0.13.0
+fiona==1.10.1
+pyarrow==25.0.1
+pysheds==0.5
+numba==0.67.0
+scikit-image==0.26.0
+matplotlib==3.11.1
+requests==2.34.2
+xarray==2026.1.0

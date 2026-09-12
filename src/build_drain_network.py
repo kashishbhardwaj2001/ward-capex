@@ -45,8 +45,21 @@ OUT = ROOT / "data/interim"
 CACHE = ROOT / "data/raw/osm_drains"
 CACHE.mkdir(parents=True, exist_ok=True)
 
-ENDPOINTS = ["https://overpass-api.de/api/interpreter",
-             "https://overpass.kumi.systems/api/interpreter"]
+# kumi.systems first: it is materially less loaded than the main instance, which returns
+# 504 on a city-sized bbox at busy times. Both are tried before a city is given up on.
+ENDPOINTS = ["https://overpass.kumi.systems/api/interpreter",
+             "https://overpass-api.de/api/interpreter",
+             "https://overpass.osm.jp/api/interpreter"]
+
+# BOTH public Overpass mirrors refuse a request that does not identify itself, and they
+# refuse it in ways that look like something else: overpass-api.de returns 406 Not
+# Acceptable, kumi.systems returns 429 with the actual reason in the body ("Please include
+# a meaningful User-Agent string"). requests' default UA is what triggers this. Without
+# this header most cities fail, the failures look like rate-limiting, and backing off
+# harder does not help because the request is never going to be accepted.
+HEADERS = {"User-Agent": ("ward-capex/1.0 (municipal climate-finance research; "
+                          "https://github.com/ward-capex) python-requests"),
+           "Accept": "application/json"}
 
 # waterway classes that carry stormwater. `river` is included as a separate class because
 # in Indian cities the "river" is frequently the primary storm drain (Mithi, Cooum, Adyar),
@@ -68,17 +81,23 @@ def query(bbox, city):
          f'way["waterway"~"^({"|".join(ALL)})$"]({s},{w},{n},{e});'
          f'way["tunnel"="culvert"]({s},{w},{n},{e});'
          f');out geom;')
+    last = ""
     for ep in ENDPOINTS:
         for attempt in range(3):
             try:
-                r = requests.post(ep, data={"data": q}, timeout=(15, 300))
+                r = requests.post(ep, data={"data": q}, headers=HEADERS,
+                                  timeout=(15, 300))
                 if r.status_code == 200:
                     j = r.json()
                     cp.write_text(json.dumps(j))
                     return j
+                last = f"{ep.split('/')[2]} HTTP {r.status_code}: {r.text[:90].strip()}"
+                # 429 means slow down; anything else will not improve by retrying fast
+                time.sleep(30 if r.status_code == 429 else 8 * (attempt + 1))
+            except Exception as e:
+                last = f"{ep.split('/')[2]} {type(e).__name__}: {str(e)[:80]}"
                 time.sleep(8 * (attempt + 1))
-            except Exception:
-                time.sleep(8 * (attempt + 1))
+    print(f"  {city:16s} QUERY FAILED - {last}")
     return None
 
 

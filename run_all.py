@@ -56,6 +56,7 @@ STAGES = [
     ("analyse_controlled",       "controlled specification"),
     ("analyse_budget_channel",   "THE DECOMPOSITION: total vs line vs share"),
     ("analyse_falsification",    "outcome-side falsification + coefficient contrasts"),
+    ("analyse_wardfe",           "ward FE arm on time-varying CHIRPS rainfall"),
     ("analyse_political",        "councillor party controls"),
     ("analyse_robustness",       "8 arms, Conley spatial SEs"),
     ("analyse_multicity",        "pooled and per-city"),

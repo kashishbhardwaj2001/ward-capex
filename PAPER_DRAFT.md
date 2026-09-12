@@ -353,7 +353,50 @@ is measuring something real, which is what the study requires.
 
 ---
 
-### 4.9 It is not partisan targeting
+### 4.9 A ward fixed-effects arm, and the confound it uncovers
+
+Every result so far is cross-sectional. Terrain hazard does not move, so a ward fixed
+effect would absorb it entirely, leaving one objection permanently open: *is this just
+ward wealth, or ward politics, or anything else fixed about a ward that the controls miss?*
+
+CHIRPS daily (0.05°, ~5.5 km) supplies a hazard measure that **moves**. Bengaluru wards
+averaged 4.9 extreme-rain days in FY2016 and 17.4 in FY2022. The question becomes
+within-ward: *when a ward has an unusually wet year, does its drainage budget respond?* —
+with a ward fixed effect absorbing terrain, wealth, councillor and location, and a year
+fixed effect absorbing the city-wide budget cycle. After both, **39% of the rainfall
+variation survives** to identify the estimates.
+
+**Run naively this produces a dramatic and wrong result.** Within-ward, a wetter year
+predicts *lower* drainage spending — β = −0.92 log points per SD, p = 0.001. Read as a
+budget response, budgets move the wrong way when it rains.
+
+They do not. The outcome here is *executed* spending recovered from work orders and their
+payment records, not an allocated budget, and **heavy rain stops construction**:
+
+| outcome, per SD of annual rainfall | β | p |
+|---|---|---|
+| **number of work orders** | **−0.55** | **0.001** |
+| drainage spend | −0.92 | 0.001 |
+| roads spend | −1.57 | 0.264 |
+| buildings spend | −2.21 | 0.238 |
+| street lighting spend | −2.82 | 0.085 |
+
+All five fall, the **order count** among them, and **drainage falls least of the four
+categories**. This is construction throughput, not allocation. Level specifications are
+therefore reported but not interpreted; the **share** is the specification that answers the
+question, because a shock common to all categories cancels out of a ratio.
+
+On the share, **no specification detects a within-ward response** — contemporaneous or
+lagged one year, extreme-rain days or annual millimetres. A ward that has an unusually wet
+year does not tilt its capital budget toward drainage the year after.
+
+The null is **moderate, not strong**: 39% residual variation, and wards sharing a 5.5 km
+CHIRPS pixel contribute none of it, so a modest real response could be missed. What it does
+establish is what the cross-section could not — the headline is not an artefact of a fixed
+ward characteristic correlated with terrain. Within a single ward, with everything fixed
+about it held constant, the hazard moves and the allocation does not follow.
+
+### 4.10 It is not partisan targeting
 
 BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 — matching
 the published headline exactly); the council's term ended in September 2020 with no

@@ -131,6 +131,25 @@ def surat():
     return g
 
 
+def ahmedabad():
+    """AMC publishes a ward-tagged drainage project list (Gujarati budget books, parsed
+    to ward + rupees). Ward names match the polygon layer's `Name` field once the leading
+    ward number and case are normalised."""
+    f = ROOT / "ahmedabad/amc_ward_drainage_projects.csv"
+    if not f.exists():
+        return None
+    d = pd.read_csv(f)
+    d["unit"] = (d["ward"].astype(str).str.upper()
+                 .str.replace(r"[^A-Z ]", " ", regex=True)
+                 .str.replace(r"\s+", " ", regex=True).str.strip())
+    d["fy"] = d["fy"].map(fy_to_int)
+    d["storm_spend"] = pd.to_numeric(d["rs_crore"], errors="coerce") * 1e7
+    g = (d.dropna(subset=["unit", "fy", "storm_spend"])
+           .groupby(["unit", "fy"]).storm_spend.sum().reset_index())
+    g["city"] = "ahmedabad"
+    return g
+
+
 def bengaluru():
     wo = pd.read_parquet(INT / "bbmp_workorders.parquet")
     w = wo[(wo.ward.between(1, 198)) & (wo.fy.between(2013, 2022))]
@@ -145,7 +164,7 @@ def bengaluru():
 # reports by 9 ZONES, and no ward->zone crosswalk is published. Joining them would be a
 # guess, so the Surat spending panel is retained but left unjoined.
 HAZ_LAYER = {"bengaluru": "bengaluru_198", "chennai": "chennai_zone",
-             "pune": "pune_admin"}
+             "pune": "pune_admin", "ahmedabad": "ahmedabad"}
 
 
 def attach_hazard(panel):
@@ -165,6 +184,12 @@ def attach_hazard(panel):
             sub["unit"] = sub["WARD_NO"].astype(str).str.replace(r"\.0$", "", regex=True)
         elif city == "chennai" and "Zone_No" in sub.columns:
             sub["unit"] = sub["Zone_No"].astype(str).str.strip()
+        elif city == "ahmedabad" and "Name" in sub.columns:
+            # "48 RAMOL HATHIJAN" -> "RAMOL HATHIJAN"
+            sub["unit"] = (sub["Name"].astype(str)
+                           .str.replace(r"^\d+\s*", "", regex=True)
+                           .str.replace(r"[^A-Za-z ]", " ", regex=True)
+                           .str.replace(r"\s+", " ", regex=True).str.upper().str.strip())
         elif city == "pune" and "name" in sub.columns:
             # Polygons are English ("Admin Ward 01 Aundh"); the budget sheet names its
             # ward offices in Marathi. Map on the Devanagari place name.
@@ -179,7 +204,8 @@ def attach_hazard(panel):
 
 
 if __name__ == "__main__":
-    parts = [p for p in [bengaluru(), pune(), chennai(), surat()] if p is not None]
+    parts = [p for p in [bengaluru(), pune(), chennai(), surat(), ahmedabad()]
+             if p is not None]
     panel = pd.concat(parts, ignore_index=True)
     panel = panel[panel.storm_spend > 0]
     print("  RAW sub-city stormwater spending panels:")

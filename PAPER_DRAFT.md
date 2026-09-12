@@ -108,20 +108,28 @@ effects, ward area, population, density and distance from the centre.
 
 #### Replication across cities
 
-Pooled across Bengaluru, Chennai and Pune (1,858 unit-years, 220 sub-city units), with
-city fixed effects and hazard standardised *within* city so a ward is never compared to a
-zone:
+Pooled across **four cities — Bengaluru, Ahmedabad, Chennai and Pune** (1,965 unit-years,
+249 sub-city units, ₹13,607 crore), with city fixed effects and hazard standardised
+*within* city so a ward is never compared to a zone:
 
 | Specification | β | p | Effect |
 |---|---|---|---|
-| City FE | −0.114 | 0.004 | −10.7% per SD |
-| City + year FE | −0.102 | 0.008 | −9.7% per SD |
-| City × year FE | −0.100 | 0.011 | −9.5% per SD |
+| City FE | −0.115 | 0.003 | −10.9% per SD |
+| City + year FE | −0.102 | 0.006 | −9.7% per SD |
+| City × year FE | −0.099 | 0.009 | −9.4% per SD |
 
-Per city: Bengaluru −11.8% (p = 0.002), Chennai −20.1% (p = 0.095), Pune −15.4%
-(p = 0.052). **The sign is negative in all three.** Only Bengaluru publishes total ward
-budgets, so the decomposition above can only be run there; the other two cities show the
-reduced-form effect.
+Per city:
+
+| City | Units | Unit-years | β | p | Effect |
+|---|---|---|---|---|---|
+| Bengaluru | 198 | 1,722 | −0.125 | 0.002 | −11.8% |
+| Chennai | 15 | 90 | −0.225 | 0.095 | −20.1% |
+| Pune | 7 | 46 | −0.167 | 0.052 | −15.4% |
+| Ahmedabad | 29 | 107 | −0.158 | 0.325 | −14.6% |
+
+**The sign is negative in all four cities**, and significant in three. Only Bengaluru
+publishes total ward budgets, so the decomposition above can only be run there; the other
+three show the reduced-form effect.
 
 #### An equity dimension
 
@@ -268,7 +276,10 @@ is measuring something real, which is what the study requires.
    blockage — the proximate causes of urban flooding.
 4. **Work orders are payments, not budgets.** Arguably better, but not an allocation
    decision.
-5. **One city.** Bengaluru proves the method; the pooled multi-city panel is in progress.
+5. **Depth varies by city.** Bengaluru carries the decomposition; Chennai, Pune and
+   Ahmedabad contribute the reduced form at coarser units (zones, ward offices) and
+   shorter panels. Surat's spending was extracted but could not be joined — its published
+   polygons are 30 wards while its budget reports 9 zones, and no crosswalk is published.
 6. **Hazard validation passed but is moderate.** Spearman ρ = +0.26 against 395 official
    BBMP/KSNDMC flood points, with a clean monotonic quartile gradient (§4.8). Good enough
    to proceed; not a hydraulic model.

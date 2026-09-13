@@ -79,7 +79,7 @@ kept **only** to demonstrate it is unusable).
 | `ward_drain_network.parquet` | 2,157 | OSM drainage line-work per ward: `osm_drain_total_m`, `osm_drain_engineered_m`, `drain_density_m_km2` |
 | `ward_crosswalk_243_to_198.parquet` | — | Areal weights mapping the 2022 delimitation onto the 2012 base. Weights sum to 1.0 per new ward; validated at 100% of money preserved. |
 | `ward_join_manual.csv` | 0 | Every disagreement between the numeric and fuzzy ward joins, with the adjudication. **Empty is the correct state** — it was non-empty until the ward-21/22 bug below was fixed. |
-| `label_sample_300_adjudicated.csv` | 300 | Hand-adjudicated classifier validation sample |
+| `label_sample_300_read.csv` | 300 | Classifier validation sample, labelled by **reading** each description twice independently (298/300 agreement) plus arbitration. `label_sample_300_adjudicated.csv` is the superseded regex-labelled version, kept only for the comparison in `validate_classifier.py` — it agrees with the read labels just 90% of the time. |
 
 ---
 

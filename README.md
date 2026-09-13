@@ -89,8 +89,11 @@ the hazard variable cannot find known floods.
 
 1. **The tagging elasticity is 35×.** The same ₹23,081 crore is 1.3% or 45.9% "drainage" depending
    on which of three defensible keyword definitions you use. Reported as a headline result,
-   not a footnote — 300 hand-adjudicated orders show the medium tier is 100% precise but
-   **80% of what it catches is bundled road-and-drain work**.
+   not a footnote — 300 independently adjudicated orders show the medium tier is 99.1%
+   precise with 95.5% recall, but **81% of the money it catches is bundled road-and-drain
+   work**. (Labelled by reading each description twice, independently, with arbitration;
+   two passes agreed on 298/300. An earlier regex-based adjudicator was discarded — it
+   shared keywords with the classifier it graded and so returned a meaningless 100%.)
 2. **Drainage is the least ward-attributable category in BBMP's own data** — 27% cannot be
    assigned to any ward, against 3–5% for most categories. Trunk drains cross wards by
    construction, which biases the headline toward zero.

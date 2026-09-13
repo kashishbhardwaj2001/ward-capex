@@ -69,10 +69,18 @@
 
 **"How sensitive is it to how you define drainage?"**
 > Very, and that's a finding in itself. The same budget is 1.3% or 46% drainage depending on
-> the keyword tier — a 35-fold range. I hand-adjudicated 300 orders: the broad tier has 98%
-> recall but 80% of what it catches is bundled "roads and drains" work. Under the strict
-> definition — dedicated stormwater assets only — the effect on drainage share is actually
-> significantly *positive*.
+> the keyword tier — a 35-fold range. I validated it on 300 orders labelled by reading each
+> description independently, twice, with arbitration — two passes agreed on 298 of 300. The
+> medium tier is 99% precise with 96% recall, but **81% of the money it catches is bundled
+> "roads and drains" work**. Under the strict definition — dedicated stormwater assets only —
+> the effect on drainage share is significantly *positive*.
+>
+> Worth saying how I got there: my first validation used a regex to adjudicate the sample,
+> and it reported exactly 100% precision. That was the tell — the adjudicator shared
+> keywords with the classifier it was grading, so the classifier was marking its own
+> homework. Re-labelled properly, the two agree only 90% of the time, and the regex failed
+> in one direction: Indian work orders name the street a drain sits on, so anything keying
+> on "road" mistakes location for scope.
 
 **"Why should I trust a terrain proxy for flood risk?"**
 > I shouldn't ask you to on faith, which is why I validated it. Spearman 0.26 against 395

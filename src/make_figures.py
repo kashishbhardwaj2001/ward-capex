@@ -28,7 +28,27 @@ def load():
     df = pd.read_parquet(ROOT / "data/final/bengaluru_final.parquet")
     g = gpd.read_file(ROOT / "data/raw/boundaries/bengaluru_198.geojson").to_crs(4326)
     g["ward"] = pd.to_numeric(g["WARD_NO"], errors="coerce")
-    return g.merge(df, on="ward", how="left")
+    out = g.merge(df, on="ward", how="left")
+    # drainage spend per resident, which F2 promises and the share alone does not show:
+    # a ward can put a large SHARE of a small budget into drains and still spend little
+    # per person.
+    #
+    # POP_TOTAL exists on BOTH the polygon file and the panel, so the merge above suffixes
+    # it to POP_TOTAL_x / POP_TOTAL_y and a plain out["POP_TOTAL"] lookup returns nothing -
+    # which silently produced an all-NaN per-capita panel and an empty subplot. Prefer the
+    # panel's own `pop` column, which the regressions use, and fall back through the
+    # suffixed names rather than assuming one of them.
+    pop = None
+    for c in ("pop", "POP_TOTAL", "POP_TOTAL_y", "POP_TOTAL_x"):
+        if c in out.columns:
+            v = pd.to_numeric(out[c], errors="coerce")
+            if v.notna().any() and (v > 0).any():
+                pop = v
+                break
+    if pop is None:
+        raise KeyError("no usable population column for the per-capita panel")
+    out["drain_pc"] = np.where(pop > 0, out["drain_medium"] / pop, np.nan)
+    return out
 
 
 def fig1_maps(gdf):
@@ -62,25 +82,49 @@ def fig1_maps(gdf):
 
 
 def fig2_scatter(gdf):
-    d = gdf.dropna(subset=["flood_hazard", "sh_drainage"])
-    fig, ax = plt.subplots(figsize=(7, 5))
-    ax.scatter(d.flood_hazard, d.sh_drainage, s=26, c=MONEY, alpha=.55,
-               edgecolor="white", linewidth=.5)
-    b, a = np.polyfit(d.flood_hazard, d.sh_drainage, 1)
-    xs = np.linspace(d.flood_hazard.min(), d.flood_hazard.max(), 50)
-    ax.plot(xs, a + b * xs, color=INK, lw=1.4)
-    r = d.flood_hazard.corr(d.sh_drainage)
-    ax.set_xlabel("Flood hazard  (share of ward below 5 m above nearest drainage)")
-    ax.set_ylabel("Drainage spending  (% of ward works budget)")
-    ax.set_title("Drainage spending barely tracks flood hazard",
-                 fontweight="bold", loc="left")
-    ax.text(.97, .05, f"r = {r:+.2f}\nno significant relationship\n(p = 0.24, ward-year panel)",
-            transform=ax.transAxes, ha="right", va="bottom", size=8, color=MUTED)
-    for _, row in d.nlargest(3, "flood_hazard").iterrows():
-        ax.annotate(str(row.blr_ward_name)[:18], (row.flood_hazard, row.sh_drainage),
-                    fontsize=7, color=MUTED, xytext=(4, 4), textcoords="offset points")
-    fig.tight_layout()
-    fig.savefig(FIG / "F2_scatter.png", bbox_inches="tight")
+    """Hazard vs drainage spending, as a SHARE and PER CAPITA.
+
+    Both panels are needed and they say different things. The share asks whether a ward
+    prioritises drainage within its own budget; per capita asks whether a resident of that
+    ward actually gets drainage money. A ward can score well on the first and badly on the
+    second, which is precisely the gap this study documents - so showing only the share
+    would flatter the result the paper is arguing against.
+    """
+    fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.9))
+    panels = [
+        ("sh_drainage", "Drainage spending  (% of ward works budget)",
+         "Share: does the ward prioritise drainage?", False),
+        ("drain_pc", "Drainage spending per resident  (Rs, FY2013-2022)",
+         "Per capita: does a resident get the money?", True),
+    ]
+    for ax, (col, ylab, title, logy) in zip(axes, panels):
+        d = gdf.dropna(subset=["flood_hazard", col])
+        d = d[d[col] > 0] if logy else d
+        if d.empty:
+            continue
+        ax.scatter(d.flood_hazard, d[col], s=26, c=MONEY, alpha=.55,
+                   edgecolor="white", linewidth=.5)
+        yv = np.log10(d[col]) if logy else d[col]
+        b, a = np.polyfit(d.flood_hazard, yv, 1)
+        xs = np.linspace(d.flood_hazard.min(), d.flood_hazard.max(), 50)
+        ax.plot(xs, 10 ** (a + b * xs) if logy else a + b * xs, color=INK, lw=1.4)
+        r = d.flood_hazard.corr(yv)
+        if logy:
+            ax.set_yscale("log")
+        ax.set_xlabel("Flood hazard  (share of ward below 5 m above nearest drainage)",
+                      size=9)
+        ax.set_ylabel(ylab, size=9)
+        ax.set_title(title, fontweight="bold", loc="left", size=10)
+        ax.text(.97, .05, f"r = {r:+.2f}", transform=ax.transAxes, ha="right",
+                va="bottom", size=8, color=MUTED)
+        for _, row in d.nlargest(3, "flood_hazard").iterrows():
+            ax.annotate(str(row.blr_ward_name)[:18], (row.flood_hazard, row[col]),
+                        fontsize=7, color=MUTED, xytext=(4, 4),
+                        textcoords="offset points")
+    fig.suptitle("Drainage spending barely tracks flood hazard, on either measure",
+                 fontweight="bold", x=.02, ha="left", size=11.5)
+    fig.tight_layout(rect=[0, 0, 1, .94])
+    fig.savefig(FIG / "F2_scatter.png", bbox_inches="tight", dpi=150)
     plt.close(fig)
 
 

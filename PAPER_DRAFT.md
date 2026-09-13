@@ -513,9 +513,14 @@ significant; the magnitude is what moves.
    move executed spending through construction throughput regardless of any budget
    response. Level specifications on time-varying rainfall are uninterpretable for that
    reason, and only the share is used.
-4b. **Classifier measures bundled work.** Hand-adjudicating 300 orders: the medium tier has
-   100% precision and 98.1% recall, but **80% of what it flags is bundled "roads and
-   drains"** where the full amount is charged to drainage. The narrow tier is clean but
+4b. **Classifier measures bundled work.** 300 orders labelled by reading each description
+   independently twice, with arbitration (298/300 agreement): the medium tier has **99.1%
+   precision and 95.5% recall**, but **81% of the money it flags is bundled "roads and
+   drains"** where the full amount is charged to drainage.
+   *An earlier version of this validation used a regex adjudicator that shared keywords with
+   the classifier it graded, and duly reported 100% precision. Re-labelled by reading, the
+   two agree on only 90% of the sample, and the regex erred in one systematic direction: it
+   read the street a drain sits on as evidence the job was a road job.* The narrow tier is clean but
    recovers only 6.5% of genuine drainage orders. Under the narrow definition the hazard
    effect on drainage share is **significantly positive** (+0.445 pp, p = 0.013 with Conley
    spatial SEs) — dedicated stormwater assets do track hazard; bundled road money does not.

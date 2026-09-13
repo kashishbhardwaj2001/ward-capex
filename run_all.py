@@ -49,7 +49,7 @@ STAGES = [
     ("verify_benchmarks",        "parser vs published row/rupee benchmarks"),
     ("verify_boundary_vintages", "198 / 243 / 369 vintages; coordinate integrity"),
     ("validate_hazard",          "GATE: hazard vs 395 observed flood points"),
-    ("validate_classifier",      "GATE: 300 hand-adjudicated work orders"),
+    ("validate_classifier",      "GATE: 300 independently read + adjudicated orders"),
     # -- analysis ----------------------------------------------------------------
     ("analyse_panel",            "descriptives"),
     ("analyse_bengaluru",        "headline cross-section"),

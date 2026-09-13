@@ -63,6 +63,7 @@ STAGES = [
     ("analyse_multicity",        "pooled and per-city"),
     ("analyse_selection",        "R11: do publishing cities differ from the rest?"),
     ("make_figures",             "F1-F7"),
+    ("build_atlas",              "generate the six-city atlas (docs/index.html)"),
 ]
 
 

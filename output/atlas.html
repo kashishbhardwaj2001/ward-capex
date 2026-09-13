@@ -434,7 +434,15 @@ document.querySelectorAll("#tbl th").forEach(th=>th.addEventListener("click",()=
   const k=th.dataset.k; sortAsc = (k===sortK)? !sortAsc : (k==="name"||k==="gap");
   sortK=k; table();}));
 tb.addEventListener("click",e=>{const tr=e.target.closest("tr"); if(!tr)return;
-  sel=+tr.dataset.w; 
+  sel=+tr.dataset.w;
+  draw(); table(); show(sel);
+});
+
+/* Party and robustness charts render ON LOAD, not inside the table click
+   handler. They were accidentally nested inside it, between `sel=+tr.dataset.w`
+   and the `draw(); table(); show(sel);});` that closes it, so both panels were
+   blank until a reader happened to click a ward row - which is not a thing anyone
+   would do before reading the section the chart belongs to. */
 const pmax=Math.max(...R.political.parties.map(p=>Math.abs(p.hz)));
 document.getElementById("parties").innerHTML=R.political.parties.map(p=>{
   const neg=p.hz<0, w=Math.abs(p.hz)/pmax*46;
@@ -452,7 +460,6 @@ document.getElementById("robust").innerHTML=R.robust.map(x=>{
    <span class="v">${x.b>0?"+":""}${x.b.toFixed(3)} <span style="color:${sig?"var(--good)":"var(--ink-3)"}">p=${x.p.toFixed(3)}</span></span></div>`;
 }).join("");
 
-draw(); table(); show(sel);});
 
 /* cities */
 const mx=Math.max(...R.cities.map(c=>Math.abs(c.b)));

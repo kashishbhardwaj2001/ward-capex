@@ -10,7 +10,11 @@
   // --- 1. initial render
   ok("map renders paths", qa("#map path").length>0, qa("#map path").length+" paths");
   ok("table renders rows", qa("#tbl tbody tr").length>0, qa("#tbl tbody tr").length+" rows");
-  ok("city buttons", qa("#citybar button").length===6, qa("#citybar button").length+" cities");
+  ok("city dropdown has 6 options", qa("#citysel option").length===6,
+     qa("#citysel option").length+" options");
+  ok("dropdown shows unit counts", q("#citysel option").textContent.includes("ward"),
+     q("#citysel option").textContent);
+  ok("dropdown reflects current city", q("#citysel").value==="bengaluru", q("#citysel").value);
   ok("metric buttons (blr=4)", qa("#metrics button").length===4, qa("#metrics button").length);
   ok("readout not empty on load", ro().length>60);
   ok("a unit is pinned on load", qa("#map path.sel").length===1);
@@ -71,10 +75,13 @@
   ok("METRIC updates scale", q("#scale").textContent.length>10);
 
   // --- 8. CITY switch
-  const cb=qa("#citybar button").find(b=>b.textContent.includes("Mumbai"));
-  fire(cb,"click");
+  const sel=q("#citysel");
+  sel.value="mumbai"; sel.dispatchEvent(new Event("change",{bubbles:true}));
   ok("CITY switch: map redrawn", qa("#map path").length===24, qa("#map path").length+" paths");
   ok("CITY switch: meta updated", q("#mapmeta").textContent.includes("Mumbai"));
+  ok("CITY switch: dropdown synced", q("#citysel").value==="mumbai");
+  ok("CITY switch: hint updated", q("#cityhint").textContent.includes("hazard + spending only"),
+     q("#cityhint").textContent);
   ok("CITY switch: metrics filtered to 2", qa("#metrics button").length===2,
      qa("#metrics button").length);
   ok("CITY switch: readout adapts", ro().includes("WARD READ-OUT"));
@@ -85,13 +92,12 @@
   const b3=ro(); fire(p2,"mousemove",{clientX:200,clientY:200});
   ok("HOVER still works after city switch", ro()!==b3);
 
-  const surat=qa("#citybar button").find(b=>b.textContent.includes("Surat"));
-  fire(surat,"click");
+  sel.value="surat"; sel.dispatchEvent(new Event("change",{bubbles:true}));
   ok("SURAT renders 10 zones", qa("#map path").length===10, qa("#map path").length+" paths");
   ok("SURAT readout says ZONE", ro().includes("ZONE READ-OUT"));
 
   // back to Bengaluru
-  fire(qa("#citybar button").find(b=>b.textContent.includes("Bengaluru")),"click");
+  sel.value="bengaluru"; sel.dispatchEvent(new Event("change",{bubbles:true}));
   ok("RETURN to Bengaluru", qa("#map path").length===198 && qa("#metrics button").length===4);
 
   const fails=T.filter(t=>!t.pass);

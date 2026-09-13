@@ -16,12 +16,20 @@ import numpy as np
 # --------------------------------------------------------------------------- styles
 EXTRA_CSS = """
 <style>
-.citybar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
-.citybar button{font:inherit;font-size:12.5px;padding:7px 14px;border:1px solid var(--rule);
-  background:var(--card);color:var(--ink-2);border-radius:3px;cursor:pointer;transition:.12s}
-.citybar button:hover{border-color:var(--ink-3);color:var(--ink)}
-.citybar button.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:500}
-.citybar button .c{font-family:"IBM Plex Mono",monospace;font-size:11px;opacity:.6;margin-left:6px}
+/* A native <select> rather than a row of buttons: it collapses to one control on a phone,
+   is keyboard- and screen-reader-native, and scales if more cities are ever added. The unit
+   count rides in the option label so the reader sees the panel size before switching. */
+.citypick{display:flex;align-items:center;gap:10px;margin:0 0 16px;flex-wrap:wrap}
+.citypick label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--ink-3)}
+.citypick select{font:inherit;font-size:14px;font-weight:500;padding:8px 34px 8px 12px;
+  border:1px solid var(--rule);border-radius:3px;background:var(--card);color:var(--ink);
+  cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center}
+.citypick select:hover{border-color:var(--ink-3)}
+.citypick select:focus-visible{outline:2px solid var(--silt);outline-offset:2px}
+.citypick .hint{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
 .panel{background:var(--card);border:1px solid var(--rule-2);border-radius:4px;padding:14px}
 .ptop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
 .segs{display:flex;gap:3px;flex-wrap:wrap}
@@ -92,7 +100,11 @@ BODY = """
 
 <section>
   <div class="sec-h"><h2>Six cities, unit by unit</h2><span class="eyebrow" id="mapmeta"></span></div>
-  <div class="citybar" id="citybar"></div>
+  <div class="citypick">
+    <label for="citysel">City</label>
+    <select id="citysel" aria-label="Choose a city to map"></select>
+    <span class="hint" id="cityhint"></span>
+  </div>
   <div class="grid2">
     <div class="panel">
       <div class="ptop"><span class="eyebrow">CHOROPLETH</span><span class="segs" id="metrics"></span></div>

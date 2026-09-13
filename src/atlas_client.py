@@ -252,9 +252,8 @@ document.getElementById("metrics").addEventListener("click", e=>{
   const b=e.target.closest("button"); if(!b) return;
   metric=b.dataset.m; metricBar(); draw(); table();
 });
-document.getElementById("citybar").addEventListener("click", e=>{
-  const b=e.target.closest("button"); if(!b) return;
-  cur=b.dataset.c; hov=null;
+document.getElementById("citysel").addEventListener("change", e=>{
+  cur=e.target.value; hov=null;
   /* falling back keeps a city that cannot compute a metric from rendering an all-grey map */
   if(METRICS[metric].rich && !CITIES[cur].rich) metric="hz";
   if(METRICS[sortK] && METRICS[sortK].rich && !CITIES[cur].rich) sortK="hz";
@@ -271,11 +270,16 @@ function metricBar(){
             ' aria-pressed="'+(metric===k)+'">'+METRICS[k].lab+"</button>").join("");
 }
 function cityBar(){
-  document.getElementById("citybar").innerHTML = Object.keys(CITIES).map(k=>{
+  const sel=document.getElementById("citysel");
+  sel.innerHTML = Object.keys(CITIES).map(k=>{
     const c=CITIES[k];
-    return '<button data-c="'+k+'"'+(cur===k?' class="on"':'')+
-           ' aria-pressed="'+(cur===k)+'">'+c.label+
-           '<span class="c">'+c.n+' '+c.unitWord+(c.n>1?"s":"")+'</span></button>';}).join("");
+    return '<option value="'+k+'"'+(cur===k?" selected":"")+">"+c.label+
+           " — "+c.n+" "+c.unitWord+(c.n>1?"s":"")+"</option>";}).join("");
+  sel.value=cur;
+  const c=CITIES[cur];
+  document.getElementById("cityhint").textContent =
+    "FY"+c.fy[0]+"–"+c.fy[1]+" · ₹"+c.storm_cr.toLocaleString()+" Cr stormwater"+
+    (c.rich?" · full decomposition":" · hazard + spending only");
 }
 function meta(){
   const c=CITIES[cur];

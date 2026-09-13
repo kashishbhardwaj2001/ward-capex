@@ -29,9 +29,30 @@ EXTRA_CSS = """
   background:transparent;color:var(--ink-2);border-radius:3px;cursor:pointer}
 .segs button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 #map svg{width:100%;height:auto;display:block}
-#map path{stroke:var(--card);stroke-width:.4;cursor:pointer}
-#map path:hover{stroke:var(--ink-2);stroke-width:1}
-#map path.sel{stroke:var(--ink);stroke-width:1.8}
+#map path{stroke:var(--card);stroke-width:.4;cursor:pointer;transition:stroke-width .08s}
+/* .hov is set by JS, not by CSS :hover. The CSS pseudo-class cannot tell the table which
+   polygon to light up, and the two views have to share one selection. */
+#map path.hov{stroke:var(--ink-2);stroke-width:1.6}
+#map path.sel{stroke:var(--ink);stroke-width:2.2}
+#map path:focus{outline:none;stroke:var(--ink);stroke-width:2.2}
+#map path:focus-visible{stroke:var(--silt);stroke-width:2.6}
+
+/* cursor tooltip - a 198-ward map needs a label without forcing a glance sideways */
+#tip{position:fixed;z-index:50;display:none;pointer-events:none;background:var(--ink);
+  color:var(--paper);padding:6px 10px;border-radius:4px;font-size:12px;line-height:1.45;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);max-width:250px}
+#tip b{display:block;font-weight:600}
+#tip span{font-family:"IBM Plex Mono",monospace;font-size:11px;opacity:.8}
+
+.pill{float:right;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;
+  padding:2px 7px;border-radius:3px;background:var(--rule-2);color:var(--ink-3)}
+.pill.pin{background:var(--water);color:var(--paper);opacity:.9}
+#tbl tbody tr{cursor:pointer}
+#tbl tbody tr.hov{background:var(--rule-2)}
+#tbl tbody tr.sel{background:var(--rule-2);box-shadow:inset 3px 0 0 var(--ink)}
+#tbl th{cursor:pointer;user-select:none;white-space:nowrap}
+#tbl th:focus-visible{outline:2px solid var(--silt);outline-offset:-2px}
+#tbl th .ar{font-size:9px;margin-left:4px;color:var(--ink-3)}
 .scale{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;
   color:var(--ink-3);font-family:"IBM Plex Mono",monospace;flex-wrap:wrap}
 .scale .bar{flex:1;min-width:90px;height:8px;border-radius:2px}
@@ -80,7 +101,12 @@ BODY = """
     </div>
     <div class="panel" id="readout"></div>
   </div>
-  <p class="note" style="margin-top:12px" id="citynote"></p>
+  <div id="tip" role="status" aria-live="polite"></div>
+  <p class="note" style="margin-top:12px">
+    <b>Hover</b> any unit to preview it &middot; <b>click</b> to keep it pinned &middot;
+    click it again to release &middot; the table and the map are one selection.
+  </p>
+  <p class="note" id="citynote"></p>
 </section>
 __SECTIONS__
 <footer>

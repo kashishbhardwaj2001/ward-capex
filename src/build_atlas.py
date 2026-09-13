@@ -248,9 +248,24 @@ def read_tables():
         R["parties"] = [{"p": r.party, "n": int(r.n), "hz": round(float(r.hz), 3)}
                         for r in agg.itertuples() if r.n >= 5]
 
+    # hazard_validation.csv is the PER-WARD table (198 rows), not the quartile summary the
+    # ladder chart needs. Reading it straight through rendered 198 ward rows where four
+    # quartiles belong - caught by an interaction test asserting the chart's row count, not
+    # by looking at the page, because 198 thin bars still look like a chart.
+    hv = csv("hazard_validation.csv")
+    if hv is not None and "hand_lt5m_share" in hv.columns:
+        hv = hv.copy()
+        hv["q"] = pd.qcut(hv.hand_lt5m_share, 4,
+                          labels=["Q1 lowest", "Q2", "Q3", "Q4 highest"])
+        g = (hv.groupby("q", observed=True)
+             .agg(wards=("ward", "size"), pts=("n_flood_pts", "sum"),
+                  density=("pts_per_km2", "mean")).reset_index())
+        R["validation"] = [{"quartile": str(r.q), "wards": int(r.wards),
+                            "pts": int(r.pts), "density": round(float(r.density), 3)}
+                           for r in g.itertuples()]
+
     for key, fn in [("robust", "robustness.csv"), ("political", "political.csv"),
                     ("classifier", "classifier_validation.csv"),
-                    ("validation", "hazard_validation.csv"),
                     ("falsification", "falsification_outcome_side.csv"),
                     ("contrasts", "falsification_contrasts.csv"),
                     ("stock", "stock_control.csv"),

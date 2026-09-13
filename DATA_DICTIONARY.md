@@ -77,7 +77,7 @@ kept **only** to demonstrate it is unusable).
 | `ward_terrain.parquet` | 2,157 | HAND / TWI / slope / elevation, same key |
 | `ward_chirps.parquet` | unit × FY | **Time-varying** extreme-rain days from CHIRPS daily 0.05°: `chirps_r20_days`, `chirps_r50_days`, `chirps_annual_mm`, `chirps_max_1day_mm` |
 | `ward_drain_network.parquet` | 2,157 | OSM drainage line-work per ward: `osm_drain_total_m`, `osm_drain_engineered_m`, `drain_density_m_km2` |
-| `ward_crosswalk_243_to_198.parquet` | — | Areal weights mapping the 2022 delimitation onto the 2012 base. Weights sum to 1.0 per new ward; validated at 100% of money preserved. |
+| `ward_crosswalk_243_to_198.parquet` | — | Areal weights mapping the 2022 delimitation onto the 2012 base. Weights sum to 1.0 per new ward — **so "money preserved" through a merge is an arithmetic identity and is NOT a validation**; an earlier version reported 100% on exactly that basis and thereby hid a real routing bug. Apply these weights **only** to rows whose `regime` is 243. |
 | `ward_join_manual.csv` | 0 | Every disagreement between the numeric and fuzzy ward joins, with the adjudication. **Empty is the correct state** — it was non-empty until the ward-21/22 bug below was fixed. |
 | `label_sample_300_read.csv` | 300 | Classifier validation sample, labelled by **reading** each description twice independently (298/300 agreement) plus arbitration. `label_sample_300_adjudicated.csv` is the superseded regex-labelled version, kept only for the comparison in `validate_classifier.py` — it agrees with the read labels just 90% of the time. |
 

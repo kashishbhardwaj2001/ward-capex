@@ -81,7 +81,7 @@ the hazard variable cannot find known floods.
 - **2,157 sub-city units across 22 boundary layers** with hazard, terrain and drainage-stock
   indicators
 - **2,088 unit-years across six cities** on a common within-city hazard definition
-- **Ward crosswalk** 243 → 198, areal-weighted, validated at 100% of money preserved
+- **Ward crosswalk** 243 → 198, areal-weighted, routed by published delimitation. 86.8% of post-2022 spend lands on a stable 198-ward base; the remaining 13.2% is 225-regime, for which **no boundary file is published**, and is excluded rather than mapped through the wrong geography
 - **`data/final/wards.gpkg`** — 198 wards × 29 attributes; open it in QGIS and check the
   study against it
 

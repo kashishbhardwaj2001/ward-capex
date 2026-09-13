@@ -65,26 +65,86 @@ if __name__ == "__main__":
           f"(max {frag.max()})")
 
     # --- validate on real money
+    #
+    # ROUTE BY DELIMITATION, NOT BY WARD NUMBER RANGE. BBMP publishes post-2022 work orders
+    # as SEPARATE FILES per ward regime - "...for 198 Wards Regime.csv", "...225...",
+    # "...243...", plus a Common Wards file - and build_panel.py records which file each
+    # order came from in `regime`. A ward number alone therefore does NOT identify a
+    # geography: ward 57 means a different polygon under each delimitation.
+    #
+    # The first version of this validation selected on `ward.between(1, 243)` and applied
+    # the 243 -> 198 weights to everything it caught. Only 18.6% of that money was actually
+    # on the 243 base. Rs 3,068 Cr was already on the 198 base and got scattered across
+    # 5.5 other wards apiece by weights that should never have touched it, and Rs 893 Cr of
+    # 225-regime orders was mapped through the wrong vintage's geometry entirely.
+    #
+    # Routing:
+    #   regime 198 / unlabelled  -> already the target geography; pass through UNCHANGED
+    #   regime 243               -> apply the areal weights (the only valid use)
+    #   regime 225               -> EXCLUDED. No 225-ward boundary file is published
+    #                               anywhere we could find, so no crosswalk can be built.
+    #                               Dropping it and saying so beats mapping it wrongly.
     wo = pd.read_parquet(OUT / "bbmp_workorders.parquet")
-    post = wo[(wo.fy >= 2023) & (wo.ward.between(1, 243))]
+    post = wo[(wo.fy >= 2023) & (wo.ward.between(1, 243))].copy()
+    post["regime"] = post["regime"].fillna("198")      # unlabelled files are 198-base
     tot_before = post.amount.sum()
-    m = post.merge(xw, left_on="ward", right_on="new_ward", how="inner")
-    m["amount_alloc"] = m["amount"] * m["w"]
-    tot_after = m.amount_alloc.sum()
-    matched = m.ward.nunique()
+
     print(f"\n  === GATE G4 validation, on post-2022 spending ===")
     print(f"    ward-tagged post-2022 spend : Rs {tot_before/1e7:,.0f} Cr "
           f"({len(post):,} orders, {post.ward.nunique()} distinct wards)")
-    print(f"    redistributed onto 198 base : Rs {tot_after/1e7:,.0f} Cr "
-          f"({matched} new wards matched)")
-    share = tot_after / tot_before * 100 if tot_before else 0
-    print(f"    money preserved             : {share:.1f}%")
-    print(f"    >>> G4 {'PASSES' if share >= 90 else 'FAILS'} "
-          f"(threshold: >=90% of spend maps to stable units)")
+    print(f"    by published delimitation:")
+    for k, g in post.groupby("regime"):
+        print(f"      regime {str(k):4s}  Rs {g.amount.sum()/1e7:7,.0f} Cr  "
+              f"({g.amount.sum()/tot_before*100:5.1f}%)  {len(g):5,d} orders")
 
-    alloc = (m.groupby(["old_ward", "fy"]).amount_alloc.sum()
-             .rename("amount").reset_index()
-             .rename(columns={"old_ward": "ward"}))
+    identity = post[post.regime.isin(["198"])]
+    to_map = post[post.regime == "243"]
+    dropped = post[post.regime == "225"]
+
+    m = to_map.merge(xw, left_on="ward", right_on="new_ward", how="inner")
+    m["amount_alloc"] = m["amount"] * m["w"]
+    mapped_cr = m.amount_alloc.sum()
+
+    alloc = pd.concat([
+        m.groupby(["old_ward", "fy"]).amount_alloc.sum().rename("amount")
+         .reset_index().rename(columns={"old_ward": "ward"}),
+        identity.groupby(["ward", "fy"]).amount.sum().reset_index(),
+    ], ignore_index=True).groupby(["ward", "fy"], as_index=False).amount.sum()
+
+    usable = identity.amount.sum() + mapped_cr
+    print(f"\n    passed through unchanged    : Rs {identity.amount.sum()/1e7:,.0f} Cr "
+          f"(already on the 198 base)")
+    print(f"    redistributed via weights   : Rs {mapped_cr/1e7:,.0f} Cr "
+          f"(243 regime, {m.ward.nunique()} wards)")
+    print(f"    EXCLUDED, no 225 boundary   : Rs {dropped.amount.sum()/1e7:,.0f} Cr "
+          f"({dropped.amount.sum()/tot_before*100:.1f}%)")
+    share = usable / tot_before * 100 if tot_before else 0
+    print(f"    -> on a stable 198-ward base: Rs {usable/1e7:,.0f} Cr ({share:.1f}%)")
+
+    # A NON-TAUTOLOGICAL CHECK. Weights are normalised to sum to 1 per new ward, so
+    # "money preserved" through the merge is an arithmetic identity - it is 100% whatever
+    # the ward numbers mean, and the old gate could not fail. What actually has to hold is
+    # that the 243-regime money lands somewhere, and that money NOT on the 243 base is
+    # never put through the weights. Both are asserted rather than printed.
+    leak = m.amount_alloc.sum() - to_map.amount.sum()
+    assert abs(leak) < 1.0, f"243-regime money changed by Rs {leak:,.0f} through the weights"
+    # Disjointness has to be checked on ROW IDENTITY, not on the job number. BBMP job
+    # numbers are ward-FY-serial and are only unique WITHIN a regime file: "198-23-000002"
+    # exists in both the 198 and the 243 release as different works, with different
+    # descriptions and amounts (187 such collisions post-2022). Anything that treats `wo`
+    # as a global key - a dedup, a merge, an anti-join like this one - silently corrupts.
+    assert not (set(to_map.index) & set(identity.index)), \
+        "198-base money was put through the 243 weights"
+    print(f"    weight round-trip on the 243 subset: Rs {leak:+,.0f} (exact)")
+    print(f"    >>> G4 {'PASSES' if share >= 90 else 'FAILS'} "
+          f"(threshold: >=90% of spend lands on a stable unit)")
+    if share < 90:
+        print(f"        The 225 regime has no published boundary file, so its "
+              f"{dropped.amount.sum()/tot_before*100:.0f}% cannot be")
+        print(f"        placed. This is a real limit of BBMP's disclosure, not a bug: any")
+        print(f"        number above would be manufactured by mapping it through a")
+        print(f"        delimitation it does not belong to.")
+
     alloc.to_parquet(OUT / "post2022_on_198base.parquet", index=False)
     xw.to_parquet(OUT / "ward_crosswalk_243_to_198.parquet", index=False)
     print(f"\n  -> {OUT/'ward_crosswalk_243_to_198.parquet'}")

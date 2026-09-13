@@ -61,6 +61,7 @@ STAGES = [
     ("analyse_political",        "councillor party controls"),
     ("analyse_robustness",       "8 arms, Conley spatial SEs"),
     ("analyse_multicity",        "pooled and per-city"),
+    ("analyse_selection",        "R11: do publishing cities differ from the rest?"),
     ("make_figures",             "F1-F7"),
 ]
 

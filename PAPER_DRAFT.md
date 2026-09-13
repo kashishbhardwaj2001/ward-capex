@@ -541,7 +541,20 @@ significant; the magnitude is what moves.
    by construction. After ward and year fixed effects only 39% of the rainfall variation
    survives, so the within-ward null in §4.9 is **moderate evidence, not strong** — a real
    but modest reallocation could be missed.
-6. **Hazard validation passed but is moderate.** Spearman ρ = +0.26 against 395 official
+6. **Selection into the sample — tested, and partly cleared.** Only six Indian cities publish
+   sub-city capital spending at all, and the obvious worry is that they are unrepresentative.
+   Comparing all 20 cities for which hazard data exists, publishers and non-publishers are
+   **statistically indistinguishable on every hazard observable** (share of land with HAND
+   < 5 m, mean HAND, days >20 mm, days >50 mm, annual precipitation — 0 of 5 significant at
+   5%). The crude selection story, that sub-city disclosure comes from the dry well-drained
+   cities where the question barely bites, is not supported. The one observable that does
+   differ is mean ward **area** (14.9 vs 3.9 km², p = 0.003), which is an artefact of this
+   study rather than a fact about the cities: three of the six publishers report at zone
+   level. What this cannot test is **governance quality**, which is what the risk is actually
+   about — no free pan-Indian measure exists at this resolution, so the subtle version of the
+   story (publishers are the *competent* cities, and competent cities may allocate
+   differently) remains open.
+7. **Hazard validation passed but is moderate.** Spearman ρ = +0.26 against 395 official
    BBMP/KSNDMC flood points, with a clean monotonic quartile gradient (§4.8). Good enough
    to proceed; not a hydraulic model.
 

@@ -311,6 +311,52 @@ def build_sections(R):
         'a smaller total budget, and there is <b>no drainage-specific compensation inside it</b>.'
         '</p></div></div></section>')
 
+
+    # ---- what this can and cannot say
+    # A page that only shows the finding invites the reader to go looking for the catch.
+    # Stating the limits on the page itself is both more honest and more persuasive: every
+    # one of these was tested rather than conceded, and two of them bias AGAINST the result.
+    S.append(
+        '<section><div class="sec-h"><h2>What this can and cannot say</h2>'
+        '<span class="eyebrow">every limit below was measured, not assumed</span></div>'
+        '<div class="grid2"><div>'
+        '<div class="eyebrow" style="margin-bottom:10px">Limits of the data</div>'
+        '<div class="rows" style="font-size:13.5px">'
+        '<div class="row"><span><b>27%</b> of Bengaluru\'s drainage money cannot be assigned '
+        'to any ward</span><b>biases <i>against</i> the finding</b></div>'
+        '<div class="row"><span>Mumbai and Surat report only <b>24 and 10</b> units</span>'
+        '<b>estimates uncertain</b></div>'
+        '<div class="row"><span>Mumbai publishes budget <b>estimates</b>, not actuals</span>'
+        '<b>plans &ne; spending</b></div>'
+        '<div class="row"><span>Chennai\'s totals cover 2012&ndash;16, its drainage 2018&ndash;25</span>'
+        '<b>no overlap</b></div>'
+        '<div class="row"><span>Pune\'s ward-office &ldquo;drainage&rdquo; is <b>foul sewerage</b></span>'
+        '<b>different system</b></div>'
+        '<div class="row"><span>Only <b>6</b> of ~4,000 Indian cities publish sub-city spending</span>'
+        '<b>selection untestable</b></div></div>'
+        '<p class="note" style="margin-top:14px">The first line matters most: trunk drains cross '
+        'ward boundaries and are built where water collects, so the money that cannot be '
+        'assigned sits disproportionately in high-hazard wards. <b>The true gap is probably '
+        'larger than reported.</b></p></div>'
+        '<div>'
+        '<div class="eyebrow" style="margin-bottom:10px">Limits of the claim</div>'
+        '<div class="rows" style="font-size:13.5px">'
+        '<div class="row"><span><b>Descriptive, not causal</b></span><b>terrain cannot be changed</b></div>'
+        '<div class="row"><span>Flood only &mdash; not heat or water</span><b>see below</b></div>'
+        '<div class="row"><span>Hazard is a <b>terrain proxy</b></span><b>not a hydraulic model</b></div>'
+        '<div class="row"><span>Bengaluru ends <b>FY2022</b></span><b>the wards were redrawn</b></div>'
+        '</div>'
+        '<p class="note" style="margin-top:14px"><b>Why Bengaluru stops at FY2022.</b> The city '
+        'redrew its wards from 198 to 243, then split into <b>five separate corporations</b> in '
+        '2025 &mdash; so the unit of analysis stops existing. Tested anyway: post-2022 data gives '
+        '&minus;5.8% on the old map and +3.5% on the new one, neither significant. The other five '
+        'cities run to FY2024&ndash;26, so the pooled panel spans <b>FY2013&ndash;2026</b>.</p>'
+        '<p class="note"><b>Why floods and not heat.</b> The standard climate grid takes <b>six '
+        'distinct values</b> across Bengaluru\'s 198 wards &mdash; a three-day spread across an '
+        'entire city. And no municipal budget has a heat line: cooling is scattered across parks, '
+        'housing, transport and water. Floods are the one hazard with both a measurable '
+        'geography and a nameable budget line.</p></div></div></section>')
+
     # ---- robustness
     S.append(
         '<section><div class="sec-h"><h2>Does the result hold up?</h2>'

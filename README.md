@@ -84,6 +84,17 @@ the hazard variable cannot find known floods.
 
 ---
 
+## Period covered
+
+**FY2013–2026 across six cities.** Each city's window is set by what it publishes:
+Ahmedabad FY2013–25 · Mumbai FY2016–26 · Chennai FY2020–26 · Pune FY2016–25 ·
+Surat FY2018–24 · **Bengaluru FY2013–22**.
+
+Bengaluru alone stops early, and not for lack of data: the city redrew its wards from 198 to
+243 and then split into **five separate corporations** in 2025, so the unit of analysis stops
+existing. Tested anyway — post-2022 gives −5.8% on the old ward map and +3.5% on the new one,
+neither significant (`src/analyse_post2022.py`).
+
 ## What is built
 
 - **82,219 BBMP work orders**, FY2011–2026, ward-tagged and classified into three drainage

@@ -53,6 +53,11 @@ POWER_MULT = 2.8            # 80% power, 5% two-sided
 if __name__ == "__main__":
     m = pd.read_parquet(FIN / "multicity_panel.parquet")
     m["uid"] = m.city + "_" + m.unit
+    # MUST match the headline per-city specification in analyse_multicity.py. A first
+    # version of this script used year fixed effects instead of log_area and produced
+    # MDEs that did not correspond to the estimates it was judging - which made every
+    # city look blind, including two that are in fact marginally significant.
+    m["log_area"] = np.log(m.area_km2.clip(lower=.01))
 
     print(f"  Could each city detect a {abs(BLR_EFFECT):.0f}% effect, if one were there?")
     print(f"  MDE = smallest true effect detectable at 80% power, 5% two-sided\n")
@@ -60,7 +65,9 @@ if __name__ == "__main__":
           f"{'MDE':>8s}  can it see {abs(BLR_EFFECT):.0f}%?")
     rows = []
     for c, g in m.groupby("city"):
-        r = smf.ols("log_spend ~ z_hazard + C(fy)", data=g).fit(
+        if g.unit.nunique() < 5:
+            continue
+        r = smf.ols("log_spend ~ z_hazard + log_area", data=g).fit(
             cov_type="cluster", cov_kwds={"groups": g.uid})
         b, se, p = r.params["z_hazard"], r.bse["z_hazard"], r.pvalues["z_hazard"]
         mde = (np.exp(POWER_MULT * se) - 1) * 100
@@ -72,24 +79,31 @@ if __name__ == "__main__":
                      "estimate_pct": est, "p": p, "mde_pct": mde, "powered": bool(able)})
 
     df = pd.DataFrame(rows)
-    blind = df[~df.powered]
+    blind = df[df.mde_pct > 100]
+    weak = df[(df.mde_pct <= 100) & (~df.powered)]
     print(f"\n  === READING ===")
-    print(f"    {len(blind)} of {len(df)} cities are BLIND to an effect of this size.")
-    print(f"    Their MDEs run from {blind.mde_pct.min():.0f}% to {blind.mde_pct.max():.0f}%,")
-    print(f"    against a Bengaluru estimate of {abs(BLR_EFFECT):.0f}%.")
+    print("    Three tiers, not two:")
     print("")
-    print("    So a misallocation of this magnitude could be occurring in every one of the")
-    print("    six cities and five of them would be unable to tell. Mumbai's positive")
-    print("    coefficient is not a contradiction - it carries an 88-point detection")
-    print("    threshold, which makes it noise rather than counter-evidence.")
+    print(f"    ADEQUATELY POWERED — Bengaluru alone (MDE ~12%, estimate ~-12%).")
+    print(f"      The only city whose data can reliably detect an effect of this size.")
     print("")
-    print("    CONSEQUENCE FOR WHAT MAY BE CLAIMED:")
-    print("      * The other five cities are DESCRIPTIVE. They demonstrate the method")
-    print("        transfers and the data can be built; they do not corroborate.")
-    print("      * 'Negative in four of six cities' overstates the evidence.")
-    print("      * The headline is a Bengaluru result, and should be presented as one.")
-    print("      * The binding constraint is disclosure RESOLUTION - Pune publishes 7")
-    print("        units, Surat 10, Chennai 15 - not anything an estimator can fix.")
+    print(f"    UNDERPOWERED BUT INFORMATIVE — Chennai, Pune, Ahmedabad (MDE 27-57%).")
+    print(f"      Chennai (-20.1%, p=0.095) and Pune (-15.4%, p=0.052) reach 10%")
+    print(f"      significance despite low power. A significant result IS evidence - but")
+    print(f"      low power means significant estimates tend to be OVERSTATED (the")
+    print(f"      winner's curse), so read the direction, not the magnitude. Had they")
+    print(f"      found nothing, that would have told us nothing.")
+    print("")
+    print(f"    UNINFORMATIVE — Mumbai (MDE 137%) and Surat (MDE 162%).")
+    print(f"      These cannot detect an effect smaller than a doubling. Their positive")
+    print(f"      coefficients are noise, not counter-evidence.")
+    print("")
+    print("    SO THE DEFENSIBLE CLAIM IS: established in Bengaluru; directionally")
+    print("    supported by Chennai and Pune with marginal significance; same sign but")
+    print("    null in Ahmedabad; and untestable in Mumbai and Surat. Not 'four of six'.")
+    print("")
+    print("    The binding constraint throughout is disclosure RESOLUTION - Pune")
+    print("    publishes 7 units, Surat 10, Chennai 15 - not anything an estimator fixes.")
 
     df.to_csv(OUT / "tables/power_by_city.csv", index=False)
     print(f"\n  -> {OUT/'tables/power_by_city.csv'}")

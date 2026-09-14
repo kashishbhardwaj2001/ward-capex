@@ -48,10 +48,12 @@ Two results make that reading hard to escape:
 | Surat | 10 zones | +45.9% | 0.272 |
 | **pooled, city × year FE** | **283 units** | **−8.4%** | **0.018** |
 
-Negative in four, positive in two — but **the five non-Bengaluru cities are underpowered by
-an order of magnitude**. Their minimum detectable effects run from 40% (Surat) to 89%
-(Mumbai) against a Bengaluru estimate of ~12%, so they are descriptive rather than
-replication tests. Dropping Bengaluru leaves −1.6% (p = 0.87).
+Negative in four, positive in two — but the cities differ enormously in what they *can*
+detect. Minimum detectable effect: **Bengaluru 12%**, Pune 27%, Chennai 46%, Ahmedabad 57%,
+Mumbai 137%, Surat 162%. So the result is **established in Bengaluru**, **directionally
+supported** by Chennai (p=0.095) and Pune (p=0.052), and **untestable** in Mumbai and Surat,
+whose data cannot see anything short of a doubling. Dropping Bengaluru leaves −1.6%
+(p = 0.87).
 Both are small-N panels on coarse units: Mumbai reports budget *estimates* rather than
 actuals across 24 wards, and Surat's hazard is aggregated up from wards to 10 budget zones,
 leaving it the most spatially smoothed of the six. The non-replications are reported rather

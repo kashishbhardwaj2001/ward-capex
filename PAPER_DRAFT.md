@@ -150,11 +150,19 @@ detectable effect* is ~13% for Bengaluru, **40% for Surat, 52% for Ahmedabad, 54
 76% for Chennai and 89% for Mumbai**. A misallocation of Bengaluru's magnitude (~12%) could
 be occurring in all six cities and **five of them would be statistically blind to it**.
 
-Mumbai's +26.8% is therefore not a contradiction; it is a number carrying an 88-point
-detection threshold. The five non-Bengaluru cities are **descriptive** — they show the method
-transfers and the data can be assembled — and cannot corroborate or refute. Consistent with
-that, dropping Bengaluru leaves a pooled estimate of −1.6% (p = 0.87), which is what an
-underpowered five-city panel should look like rather than evidence of absence.
+That gives **three tiers, not two**:
+
+| tier | cities | what they can say |
+|---|---|---|
+| Adequately powered | Bengaluru (MDE 12%) | establishes the result |
+| Underpowered but informative | Chennai (−20.1%, p=0.095), Pune (−15.4%, p=0.052), Ahmedabad (−14.6%, ns) | directionally supportive; read the **sign**, not the magnitude |
+| Uninformative | Mumbai (MDE 137%), Surat (MDE 162%) | cannot detect anything short of a doubling |
+
+Chennai and Pune reach 10% significance *despite* low power, which is real evidence — but
+low power inflates significant estimates (the winner's curse), so their magnitudes should
+not be read literally. Mumbai's +26.8% is not a contradiction: it carries a 137-point
+detection threshold, which makes it noise. Dropping Bengaluru leaves a pooled −1.6%
+(p = 0.87) — what an underpowered panel looks like, not evidence of absence.
 
 The binding constraint is **disclosure resolution**, not estimation: Pune publishes 7 units,
 Surat 10, Chennai 15. No estimator recovers a ward-scale effect from seven chunks.

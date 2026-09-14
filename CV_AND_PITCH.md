@@ -13,7 +13,7 @@
 > terrain-based flood hazard (HAND, Copernicus DEM) for 2,157 sub-city units across 22
 > cities and validated it against 395 official BBMP/KSNDMC flood locations.
 
-> **Finding:** flood-prone wards receive **8–13% smaller capital budgets** (p < 0.01) while
+> **Finding (Bengaluru, 198 wards, FY2013–22):** flood-prone wards receive **8–13% smaller capital budgets** (p < 0.01) while
 > allocating a *higher* share of what they get to drainage — the misallocation sits in the
 > budget envelope, not the drainage line. Survives party fixed effects, an existing-stock
 > control and a ward fixed-effects arm on time-varying rainfall; same sign in four of six
@@ -23,7 +23,7 @@
 
 > Built an open-source pipeline joining 82,219 municipal work orders to satellite-derived
 > flood hazard across 22 Indian cities; found flood-prone wards receive 8–13% smaller capital
-> budgets (p < 0.01), replicated in four of six cities.
+> budgets (p < 0.01); extended to six cities, though only Bengaluru's disclosure is fine-grained enough to test it.
 
 ---
 

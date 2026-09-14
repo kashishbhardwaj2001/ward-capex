@@ -144,9 +144,20 @@ Per city:
 | **Mumbai** | 24 wards | 64 | **+0.237** | 0.442 | **+26.8%** |
 | **Surat** | 10 zones | 59 | **+0.377** | 0.272 | **+45.9%** |
 
-**Negative in four of six cities**, significant in three. The two positive cities run the
-other way but **neither is statistically distinguishable from zero** — Mumbai's standard
-error is three times the pooled effect and Surat's is larger still.
+**Negative in four of six cities**, significant in three — but that framing overstates the
+evidence, and a power calculation says why. At 80% power and a 5% test, the *minimum
+detectable effect* is ~13% for Bengaluru, **40% for Surat, 52% for Ahmedabad, 54% for Pune,
+76% for Chennai and 89% for Mumbai**. A misallocation of Bengaluru's magnitude (~12%) could
+be occurring in all six cities and **five of them would be statistically blind to it**.
+
+Mumbai's +26.8% is therefore not a contradiction; it is a number carrying an 88-point
+detection threshold. The five non-Bengaluru cities are **descriptive** — they show the method
+transfers and the data can be assembled — and cannot corroborate or refute. Consistent with
+that, dropping Bengaluru leaves a pooled estimate of −1.6% (p = 0.87), which is what an
+underpowered five-city panel should look like rather than evidence of absence.
+
+The binding constraint is **disclosure resolution**, not estimation: Pune publishes 7 units,
+Surat 10, Chennai 15. No estimator recovers a ward-scale effect from seven chunks.
 
 The two non-replications share a structural feature that is worth stating plainly rather
 than treating as coincidence: **both are the coarsest and smallest panels in the set.**

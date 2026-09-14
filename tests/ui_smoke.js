@@ -18,6 +18,13 @@
   ok("metric buttons (blr=4)", qa("#metrics button").length===4, qa("#metrics button").length);
   ok("readout not empty on load", ro().length>60);
   ok("a unit is pinned on load", qa("#map path.sel").length===1);
+  // the six-city bars live in the same container as the combined-effect box, so assert
+  // the bars specifically - both have silently rendered empty before
+  ok("six city bars render", qa("#citybars .city").length===6, qa("#citybars .city").length+" bars");
+  ok("combined effect box present", !!q(".combined"), q(".combined")?q(".combined").textContent.slice(0,18):"MISSING");
+  ok("alignment gap column populated",
+     qa("#tbl tbody tr").filter(r=>r.textContent.includes("—")).length < qa("#tbl tbody tr").length*0.5,
+     "rows with a dash: "+qa("#tbl tbody tr").filter(r=>r.textContent.includes("—")).length);
   const EXP={ladder:5,tiers:3,parties:4,robust:8};   // ladder = 4 quartiles + 1 caption
   Object.keys(EXP).forEach(id=>
     ok("chart #"+id+" has "+EXP[id]+" rows",

@@ -142,15 +142,16 @@ def build_cities():
     blr = pd.read_parquet(FIN / "bengaluru_final.parquet")
     blr["unit"] = blr["ward"].astype("Int64").astype(str)
 
+    # THE ALIGNMENT GAP is computed in analyse_bengaluru.py and make_figures.py but never
+    # written to a table, so reading one produced an all-empty column on the page. Compute
+    # it here with the same definition make_figures uses: the residual from the line
+    # relating drainage share to flood hazard. Negative = more hazard than money.
     gap = None
-    gp = TAB / "alignment_gap.csv"
-    if gp.exists():
-        gg = pd.read_csv(gp)
-        wc = [c for c in gg.columns if c.lower() in ("ward", "unit")]
-        rc = [c for c in gg.columns if "resid" in c.lower() or c.lower() == "gap"]
-        if wc and rc:
-            gap = gg[[wc[0], rc[0]]].rename(columns={wc[0]: "w", rc[0]: "gap"})
-            gap["unit"] = pd.to_numeric(gap.w, errors="coerce").astype("Int64").astype(str)
+    if {"flood_hazard", "share_medium"}.issubset(blr.columns):
+        g0 = blr.dropna(subset=["flood_hazard", "share_medium"]).copy()
+        b1, b0 = np.polyfit(g0.flood_hazard, g0.share_medium, 1)
+        g0["gap"] = g0.share_medium - (b0 + b1 * g0.flood_hazard)
+        gap = g0[["unit", "gap"]]
 
     cities = {}
     for city, layer in LAYER.items():

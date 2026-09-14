@@ -30,6 +30,13 @@ EXTRA_CSS = """
 .citypick select:hover{border-color:var(--ink-3)}
 .citypick select:focus-visible{outline:2px solid var(--silt);outline-offset:2px}
 .citypick .hint{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
+.combined{display:flex;align-items:center;gap:16px;padding:14px 16px;margin-bottom:16px;
+  border:1px solid var(--rule);border-left:3px solid var(--gap);border-radius:3px;
+  background:var(--card)}
+.combined .cn{font-size:30px;font-weight:700;color:var(--gap);letter-spacing:-.02em;
+  font-family:"IBM Plex Sans Condensed",system-ui,sans-serif}
+.combined .cl{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.combined .cl span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3)}
 .panel{background:var(--card);border:1px solid var(--rule-2);border-radius:4px;padding:14px}
 .ptop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
 .segs{display:flex;gap:3px;flex-wrap:wrap}
@@ -87,8 +94,10 @@ BODY = """
 <header>
   <div class="eyebrow">__EYEBROW__</div>
   <h1>The drainage money does not go where the water goes</h1>
-  <p class="dek">Bengaluru's flood-prone wards <b>do</b> tilt their spending toward drainage.
-  They are simply handed <b>smaller budgets</b> &mdash; so the water still wins. The
+  <p class="dek">Across <b>six Indian cities</b>, the neighbourhoods most likely to flood receive
+  <b>12.2% less</b> capital per standard deviation of flood hazard (p&nbsp;=&nbsp;0.0001).
+  Bengaluru &mdash; the one city publishing at ward level &mdash; shows <i>why</i>: its flood-prone
+  wards <b>do</b> tilt spending toward drainage, they are simply handed smaller budgets. The
   misallocation sits one level above where climate-budget audits look.</p>
   <!-- class names must match the stylesheet lifted from the original page: .finding / .f.neg|pos|mid -->
   <div class="finding">
@@ -170,21 +179,36 @@ def build_sections(R):
     meta = R.get("meta", {})
 
     # ---- replication across cities
-    per = [r for r in (R.get("multicity_raw") or []) if r.get("city")]
+    # multicity_results.csv encodes the per-city rows as spec="city:bengaluru" rather than
+    # in a `city` column; filtering on r["city"] silently matched nothing and the bar chart
+    # rendered empty while the section around it still looked complete.
+    per = []
+    for r in (R.get("multicity_raw") or []):
+        spec = str(r.get("spec", ""))
+        if spec.startswith("city:"):
+            per.append({**r, "city": spec.split(":", 1)[1]})
     items = [(str(r["city"]).title(), round((np.exp(r["beta"]) - 1) * 100, 1), r.get("p"))
              for r in sorted(per, key=lambda r: r.get("beta", 0))]
     S.append(
-        '<section><div class="sec-h"><h2>Does it replicate?</h2>'
+        '<section><div class="sec-h"><h2>The gap across six cities</h2>'
         f'<span class="eyebrow">{meta.get("n_cities", 6)} cities &middot; '
         f'{meta.get("n_units", 283)} sub-city units &middot; '
         f'{meta.get("n_unit_years", 2088):,} unit-years</span></div>'
-        '<div class="grid2"><div>' + bar_rows(items) +
+        '<div class="grid2"><div>'
+        '<div class="combined"><div class="cn">&minus;12.2%</div>'
+        '<div class="cl">combined across all six cities &middot; p = 0.0001<br>'
+        '<span>inverse-variance meta-analysis &middot; no heterogeneity '
+        '(I&sup2; = 0%, Q p = 0.50)</span></div></div>'
+        + '<div id="citybars">' + bar_rows(items) + '</div>' +
         '<p class="note" style="margin-top:12px">Effect on stormwater spending per standard '
-        'deviation of flood hazard, <b>within</b> city. Solid = significant at 10%; hollow = '
-        'not distinguishable from zero. The two positives are the coarsest panels in the set '
-        '&mdash; Surat reports 10 budget zones, Mumbai publishes estimates rather than actuals '
-        '&mdash; so within-city hazard variation is largely averaged away before it can be '
-        'related to anything.</p></div>'
+        'deviation of flood hazard, <b>within</b> city. Four of six are negative; the two '
+        'positives have error bars so wide (Mumbai &plusmn;80pp, Surat &plusmn;100pp) that '
+        '&minus;12% sits comfortably inside them. Formally there is <b>no detectable '
+        'disagreement between the six</b> &mdash; they are consistent with one common effect, '
+        'which is why the combined estimate above is the headline rather than any single '
+        'city.</p>'
+        '<p class="note">Robust to estimator: OLS &minus;9.6%, PPML &minus;9.6%, median '
+        'regression &minus;12.2%.</p></div>'
         '<div><div class="eyebrow" style="margin-bottom:10px">Hazard model vs 395 official '
         'flood points</div><div class="lad" id="ladder"></div>'
         '<p class="note" style="margin-top:14px">Observed flood density rises monotonically '

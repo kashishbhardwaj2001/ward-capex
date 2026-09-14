@@ -102,7 +102,7 @@ BODY = """
   <!-- class names must match the stylesheet lifted from the original page: .finding / .f.neg|pos|mid -->
   <div class="finding">
     <div class="f neg"><div class="n">&minus;12.8%</div><div class="l">total ward capital budget, per standard deviation of flood hazard</div><div class="p">p &lt; 0.0001</div></div>
-    <div class="f pos"><div class="n">+1.61pp</div><div class="l">of that budget goes to drainage &mdash; wards do prioritise correctly</div><div class="p">p = 0.047</div></div>
+    <div class="f pos"><div class="n">+1.61pp</div><div class="l">of that budget goes to drainage &mdash; wards do appear to prioritise correctly</div><div class="p">p = 0.047 &middot; <i>suggestive: does not survive false-discovery correction</i></div></div>
     <div class="f mid"><div class="n">&minus;9.0%</div><div class="l">net drainage spending where water collects</div><div class="p">p = 0.016</div></div>
   </div>
 </header>
@@ -369,6 +369,32 @@ def build_sections(R):
         'road-and-drain money does not.</p>'
         '<p class="note">The headline budget penalty ranges <b>&minus;8% to &minus;12.8%</b> '
         'depending on how much terrain is absorbed into the controls, and is significant in every '
-        'specification.</p></div></div></section>')
+        'specification.</p>'
+        '<div class="eyebrow" style="margin:18px 0 8px">Does it depend on the 5 m threshold?</div>'
+        '<div class="rows" style="font-size:13px">'
+        '<div class="row"><span>within 1 m</span><b>&minus;6.8%&nbsp;&nbsp;p=0.021</b></div>'
+        '<div class="row"><span>within 3 m</span><b>&minus;6.4%&nbsp;&nbsp;p=0.040</b></div>'
+        '<div class="row"><span>within 5 m &nbsp;<i>headline</i></span><b>&minus;7.8%&nbsp;&nbsp;p=0.016</b></div>'
+        '<div class="row"><span>within 10 m</span><b>&minus;11.2%&nbsp;&nbsp;p=0.001</b></div>'
+        '<div class="row"><span><b>mean HAND &mdash; no threshold at all</b></span>'
+        '<b>&minus;13.6%&nbsp;&nbsp;p=0.0007</b></div></div>'
+        '<p class="note" style="margin-top:10px">Significant at every threshold and '
+        '<b>strongest with no threshold</b> &mdash; the opposite of a threshold artefact. '
+        'Dropping population entirely gives &minus;8.0%; using satellite built-up area instead '
+        'gives &minus;7.5%; using no controls at all gives &minus;11.1%. The controls shrink the '
+        'effect rather than create it.</p>'
+        '<div class="eyebrow" style="margin:18px 0 8px">Corrected for multiple testing</div>'
+        '<div class="rows" style="font-size:13px">'
+        '<div class="row"><span>hazard &rarr; total budget</span>'
+        '<b style="color:var(--good)">survives</b></div>'
+        '<div class="row"><span>hazard &rarr; stormwater spend</span>'
+        '<b style="color:var(--good)">survives</b></div>'
+        '<div class="row"><span>hazard &rarr; drainage <i>share</i></span>'
+        '<b style="color:var(--silt)">fails FDR (0.063)</b></div></div>'
+        '<p class="note" style="margin-top:10px">The headline survives any correction. The '
+        '<b>+1.61pp share result does not</b>, and is reported as suggestive rather than '
+        'established &mdash; the main claim rests on the total-budget channel, which is '
+        'unaffected.</p>'
+        '</div></div></section>')
 
     return "\n".join(S)

@@ -152,6 +152,15 @@ Everything else is re-fetchable from public URLs with **no accounts and no crede
 | Existing drainage stock | OpenStreetMap via Overpass | ODbL |
 | Landslide hazard | GFDRR / World Bank Data Catalog | open |
 
+### Robustness
+
+Significant at **every** HAND threshold (1/2/3/5/10 m, −6.4% to −11.2%) and **strongest with
+no threshold at all** (mean HAND, −13.6%, p = 0.0007). Holds with population dropped (−8.0%),
+with satellite built-up area substituted (−7.5%), and with no controls (−11.1%) — the
+controls shrink the effect rather than create it. Three estimators agree (OLS −9.6%, PPML
+−9.6%, median −12.2%). The headline survives Bonferroni and FDR correction; the **+1.61pp
+share result does not survive FDR (0.063)** and is reported as suggestive.
+
 See [`LICENSE`](LICENSE) — the MIT licence covers the **code only**; two of the data sources
 are share-alike.
 

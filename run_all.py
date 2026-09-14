@@ -62,6 +62,7 @@ STAGES = [
     ("analyse_robustness",       "8 arms, Conley spatial SEs"),
     ("analyse_multicity",        "pooled and per-city"),
     ("analyse_selection",        "R11: do publishing cities differ from the rest?"),
+    ("analyse_post2022",         "out-of-sample: does it hold after the window closes?"),
     ("make_figures",             "F1-F7"),
     ("build_atlas",              "generate the six-city atlas (docs/index.html)"),
 ]

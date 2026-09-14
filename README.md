@@ -48,7 +48,12 @@ Two results make that reading hard to escape:
 | Surat | 10 zones | +45.9% | 0.272 |
 | **pooled, city × year FE** | **283 units** | **−8.4%** | **0.018** |
 
-Negative in four, positive in two — but the cities differ enormously in what they *can*
+**Meta-analysis across all six cities: −12.2%, p = 0.0001**, with *zero* heterogeneity
+(I² = 0%, Q p = 0.50) — the six estimates are consistent with a single common effect, so
+Mumbai's and Surat's positives are noise around it rather than contradictions. Robust to
+estimator: OLS −9.6%, PPML −9.6%, median regression −12.2%.
+
+Negative in four, positive in two — and the cities differ enormously in what they *can*
 detect. Minimum detectable effect: **Bengaluru 12%**, Pune 27%, Chennai 46%, Ahmedabad 57%,
 Mumbai 137%, Surat 162%. So the result is **established in Bengaluru**, **directionally
 supported** by Chennai (p=0.095) and Pune (p=0.052), and **untestable** in Mumbai and Surat,

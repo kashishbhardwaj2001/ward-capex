@@ -64,6 +64,7 @@ STAGES = [
     ("analyse_selection",        "R11: do publishing cities differ from the rest?"),
     ("analyse_post2022",         "out-of-sample: does it hold after the window closes?"),
     ("analyse_power",            "could each city have detected the effect at all?"),
+    ("analyse_meta",             "meta-analysis across cities + estimator robustness"),
     ("make_figures",             "F1-F7"),
     ("build_atlas",              "generate the six-city atlas (docs/index.html)"),
 ]

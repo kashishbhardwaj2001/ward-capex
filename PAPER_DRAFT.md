@@ -150,6 +150,45 @@ detectable effect* is ~13% for Bengaluru, **40% for Surat, 52% for Ahmedabad, 54
 76% for Chennai and 89% for Mumbai**. A misallocation of Bengaluru's magnitude (~12%) could
 be occurring in all six cities and **five of them would be statistically blind to it**.
 
+#### Combining the six cities properly
+
+Per-city p-values invite dismissing four negative estimates one at a time. That discards
+exactly the information that combining them recovers. **Meta-analysis** treats each city as
+a study and weights by *precision* rather than row count:
+
+| method | combined effect | p |
+|---|---|---|
+| Fixed-effect (inverse-variance) | **−12.2%** | **0.0001** |
+| Random-effects (DerSimonian–Laird) | −12.2% | 0.0001 |
+| Stouffer's combined p (one-sided) | — | 0.0088 |
+
+**Heterogeneity is nil: Cochran's Q = 4.3 (df 5, p = 0.503), I² = 0%, τ² = 0.** The six
+estimates are statistically consistent with a *single common effect*. Mumbai's +26.8% and
+Surat's +45.9% are not counter-evidence — they are what noisy draws around a −12% effect
+look like when the standard error is 0.31. Because τ² = 0, fixed and random effects
+coincide, so nothing rests on the choice of model.
+
+This supersedes the pooled regression as the multi-city result. Pooled OLS weights cities
+by row count, so Bengaluru's 1,722 of 2,088 unit-years dominate it and dropping Bengaluru
+collapses it to −1.6% — an artefact of weighting, not a finding.
+
+#### Is OLS the right estimator?
+
+Not self-evidently, so it is tested rather than assumed:
+
+| estimator | effect | p |
+|---|---|---|
+| OLS on log(spend) | −9.6% | 0.007 |
+| PPML (Poisson pseudo-ML — handles zeros, no retransformation bias) | −9.6% | 0.247 |
+| Median (quantile) regression | −12.2% | 0.001 |
+
+All three land between −9.6% and −12.2%. PPML loses significance because it up-weights a
+few very large works and its standard error roughly doubles; its point estimate is
+unchanged. Median regression, which does the opposite, is the most significant. The effect
+is not an artefact of functional form.
+
+#### Power by city
+
 That gives **three tiers, not two**:
 
 | tier | cities | what they can say |

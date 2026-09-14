@@ -552,6 +552,56 @@ penalty is therefore **−8% to −13% per standard deviation of hazard**, depen
 much terrain is absorbed into the controls. Every specification is negative and
 significant; the magnitude is what moves.
 
+### 4.12 Four checks a referee would ask for
+
+Each of these was an untested exposure rather than a known weakness, so each is run rather
+than conceded.
+
+**(a) Does the result depend on the 5 m hazard threshold?** No. Re-measured from the DEM at
+every threshold, and against two threshold-free measures:
+
+| hazard measure | effect | p |
+|---|---|---|
+| share within 1 m | −6.8% | 0.021 |
+| share within 2 m | −6.7% | 0.031 |
+| share within 3 m | −6.4% | 0.040 |
+| **share within 5 m** *(headline)* | **−7.8%** | **0.016** |
+| share within 10 m | −11.2% | 0.001 |
+| **mean HAND** *(no threshold at all)* | **−13.6%** | **0.0007** |
+| topographic wetness index | −7.4% | 0.056 |
+
+Significant at every threshold, and **strongest under the threshold-free measure** — the
+opposite of what a threshold artefact looks like.
+
+**(b) Is it propped up by 2011 census population, on a FY2013–22 panel?** No.
+
+| specification | effect | p |
+|---|---|---|
+| full controls *(headline)* | −7.8% | 0.016 |
+| population dropped entirely | −8.0% | 0.014 |
+| satellite built-up area instead of population | −7.5% | 0.018 |
+| no controls at all | −11.1% | <0.0001 |
+
+The controls *shrink* the effect rather than create it.
+
+**(c) BBMP's council term ended in September 2020**, so party controls for FY2021–22 describe
+a council that did not exist. Restricting to FY2013–2020 gives −7.5% (p = 0.013) against
+−7.8% on the full panel. Unchanged.
+
+**(d) Multiple testing.** The headline family, corrected:
+
+| test | raw p | Bonferroni | BH-FDR |
+|---|---|---|---|
+| hazard → total budget | <0.0001 | <0.0001 | <0.0001 ✅ |
+| hazard → stormwater | 0.016 | 0.064 | 0.032 ✅ |
+| hazard → share | 0.047 | 0.188 | **0.063 ✗** |
+| hazard → stormwater \| budget | 0.156 | 0.622 | 0.156 ✗ |
+
+**The headline survives any correction. The +1.61pp share result does not survive
+false-discovery-rate correction** and should be described as suggestive rather than
+established. This does not affect the main claim — which rests on the total-budget channel —
+but it is stated rather than left for a reader to discover.
+
 ## 5. Limitations
 
 1. **Descriptive, not causal.** Terrain hazard is time-invariant and non-manipulable;

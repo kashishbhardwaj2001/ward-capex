@@ -65,6 +65,8 @@ STAGES = [
     ("analyse_post2022",         "out-of-sample: does it hold after the window closes?"),
     ("analyse_power",            "could each city have detected the effect at all?"),
     ("analyse_meta",             "meta-analysis across cities + estimator robustness"),
+    ("build_hand_thresholds",    "HAND at 1/2/3/5/10 m for the threshold check"),
+    ("analyse_robustness2",      "threshold, stale population, council vacancy, multiplicity"),
     ("make_figures",             "F1-F7"),
     ("build_atlas",              "generate the six-city atlas (docs/index.html)"),
 ]

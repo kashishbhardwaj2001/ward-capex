@@ -181,6 +181,27 @@ a{color:var(--water)}
 .pill{float:right;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;
   padding:2px 7px;border-radius:3px;background:var(--rule-2);color:var(--ink-3)}
 .pill.pin{background:var(--water);color:var(--paper);opacity:.9}
+/* masthead: dataset stats on the left, a quiet credit on the right */
+.mast{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.credit{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);text-decoration:none;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:7px;transition:color .12s}
+.credit b{font-weight:500;color:var(--ink-2);transition:color .12s}
+.credit svg{width:11px;height:11px;fill:currentColor;opacity:.7;transition:opacity .12s}
+.credit:hover b,.credit:hover{color:var(--water)}
+.credit:hover svg{opacity:1}
+.credit:focus-visible{outline:2px solid var(--silt);outline-offset:4px;border-radius:2px}
+
+/* footer: sources and the caveat on one row, contact on its own line beneath */
+footer{flex-wrap:wrap}
+footer .foot-note{margin-left:auto;font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+footer .foot-contact{flex-basis:100%;margin-top:6px;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;letter-spacing:.04em}
+footer .foot-contact a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);
+  transition:color .12s,border-color .12s}
+footer .foot-contact a:hover{color:var(--water);border-color:var(--water)}
+footer .foot-contact a:focus-visible{outline:2px solid var(--silt);outline-offset:3px}
+
 /* The unit table is a dropdown: closed by default so 198 rows do not make the page a
    long scroll. The header row is the toggle; the count and hint text live in the eyebrow. */
 details.units>summary{cursor:pointer;list-style:none}
@@ -220,7 +241,12 @@ details.units[open] .closed-only{display:none}
 </head><body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">6 CITIES &middot; 283 SUB-CITY UNITS &middot; 2,088 UNIT-YEARS &middot; 68,415 BBMP WORK ORDERS</div>
+  <div class="mast">
+    <div class="eyebrow">6 CITIES &middot; 283 SUB-CITY UNITS &middot; 2,088 UNIT-YEARS &middot; 68,415 BBMP WORK ORDERS</div>
+    <a class="credit" href="https://www.linkedin.com/in/kashish2001/" target="_blank" rel="noopener"
+       aria-label="Built by Kashish - LinkedIn profile">Built by <b>Kashish</b>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+  </div>
   <h1>The drainage money does not go where the water goes</h1>
   <p class="dek">Across <b>six Indian cities</b>, the neighbourhoods most likely to flood receive
   <b>12.2% less</b> capital per standard deviation of flood hazard (p&nbsp;=&nbsp;0.0001).
@@ -266,9 +292,11 @@ details.units[open] .closed-only{display:none}
 <section><div class="sec-h"><h2>What this can and cannot say</h2><span class="eyebrow">every limit below was measured, not assumed</span></div><div class="grid2"><div><div class="eyebrow" style="margin-bottom:10px">Limits of the data</div><div class="rows" style="font-size:13.5px"><div class="row"><span><b>27%</b> of Bengaluru's drainage money cannot be assigned to any ward</span><b>biases <i>against</i> the finding</b></div><div class="row"><span>Mumbai and Surat report only <b>24 and 10</b> units</span><b>estimates uncertain</b></div><div class="row"><span>Mumbai publishes budget <b>estimates</b>, not actuals</span><b>plans &ne; spending</b></div><div class="row"><span>Chennai's totals cover 2012&ndash;16, its drainage 2018&ndash;25</span><b>no overlap</b></div><div class="row"><span>Pune's ward-office &ldquo;drainage&rdquo; is <b>foul sewerage</b></span><b>different system</b></div><div class="row"><span>Only <b>6</b> of ~4,000 Indian cities publish sub-city spending</span><b>selection untestable</b></div></div><p class="note" style="margin-top:14px">The first line matters most: trunk drains cross ward boundaries and are built where water collects, so the money that cannot be assigned sits disproportionately in high-hazard wards. <b>The true gap is probably larger than reported.</b></p></div><div><div class="eyebrow" style="margin-bottom:10px">Limits of the claim</div><div class="rows" style="font-size:13.5px"><div class="row"><span><b>Descriptive, not causal</b></span><b>terrain cannot be changed</b></div><div class="row"><span>Flood only &mdash; not heat or water</span><b>see below</b></div><div class="row"><span>Hazard is a <b>terrain proxy</b></span><b>not a hydraulic model</b></div><div class="row"><span>Bengaluru ends <b>FY2022</b></span><b>the wards were redrawn</b></div></div><p class="note" style="margin-top:14px"><b>Why Bengaluru stops at FY2022.</b> The city redrew its wards from 198 to 243, then split into <b>five separate corporations</b> in 2025 &mdash; so the unit of analysis stops existing. Tested anyway: post-2022 data gives &minus;5.8% on the old map and +3.5% on the new one, neither significant. The other five cities run to FY2024&ndash;26, so the pooled panel spans <b>FY2013&ndash;2026</b>.</p><p class="note"><b>Why floods and not heat.</b> The standard climate grid takes <b>six distinct values</b> across Bengaluru's 198 wards &mdash; a three-day spread across an entire city. And no municipal budget has a heat line: cooling is scattered across parks, housing, transport and water. Floods are the one hazard with both a measurable geography and a nameable budget line.</p></div></div></section>
 <section><div class="sec-h"><h2>Does the result hold up?</h2><span class="eyebrow">robustness arms &middot; Conley spatial SEs</span></div><div class="grid2"><div id="robust"></div><div><p class="note" style="margin-top:0">Effect on the drainage share per standard deviation of hazard, each arm re-estimated with ward-clustered and Conley spatial standard errors. Under the <b>narrow</b> definition &mdash; dedicated stormwater assets only &mdash; the effect is <b>significantly positive</b>. Dedicated drainage does track hazard; bundled road-and-drain money does not.</p><p class="note">The headline budget penalty ranges <b>&minus;8% to &minus;12.8%</b> depending on how much terrain is absorbed into the controls, and is significant in every specification.</p><div class="eyebrow" style="margin:18px 0 8px">Does it depend on the 5 m threshold?</div><div class="rows" style="font-size:13px"><div class="row"><span>within 1 m</span><b>&minus;6.8%&nbsp;&nbsp;p=0.021</b></div><div class="row"><span>within 3 m</span><b>&minus;6.4%&nbsp;&nbsp;p=0.040</b></div><div class="row"><span>within 5 m &nbsp;<i>headline</i></span><b>&minus;7.8%&nbsp;&nbsp;p=0.016</b></div><div class="row"><span>within 10 m</span><b>&minus;11.2%&nbsp;&nbsp;p=0.001</b></div><div class="row"><span><b>mean HAND &mdash; no threshold at all</b></span><b>&minus;13.6%&nbsp;&nbsp;p=0.0007</b></div></div><p class="note" style="margin-top:10px">Significant at every threshold and <b>strongest with no threshold</b> &mdash; the opposite of a threshold artefact. Dropping population entirely gives &minus;8.0%; using satellite built-up area instead gives &minus;7.5%; using no controls at all gives &minus;11.1%. The controls shrink the effect rather than create it.</p><div class="eyebrow" style="margin:18px 0 8px">Corrected for multiple testing</div><div class="rows" style="font-size:13px"><div class="row"><span>hazard &rarr; total budget</span><b style="color:var(--good)">survives</b></div><div class="row"><span>hazard &rarr; stormwater spend</span><b style="color:var(--good)">survives</b></div><div class="row"><span>hazard &rarr; drainage <i>share</i></span><b style="color:var(--silt)">fails FDR (0.063)</b></div></div><p class="note" style="margin-top:10px">The headline survives any correction. The <b>+1.61pp share result does not</b>, and is reported as suggestive rather than established &mdash; the main claim rests on the total-budget channel, which is unaffected.</p></div></div></section>
 <footer>
-  Spending: BBMP Works Bill Public View via OpenCity &middot; Hazard: Copernicus DEM GLO-30 (HAND)
-  &middot; Rainfall: CHIRPS &middot; Boundaries: DataMeet CC BY-SA 2.5 IN &middot; Validation: BBMP / KSNDMC
-  <span style="float:right;font-family:'IBM Plex Mono',monospace">Descriptive, not causal</span>
+  <span class="foot-src">Spending: BBMP Works Bill Public View via OpenCity &middot; Hazard: Copernicus DEM GLO-30 (HAND)
+  &middot; Rainfall: CHIRPS &middot; Boundaries: DataMeet CC BY-SA 2.5 IN &middot; Validation: BBMP / KSNDMC</span>
+  <span class="foot-note">Descriptive, not causal</span>
+  <span class="foot-contact">Contact us &middot;
+    <a href="mailto:kashishbhardwaj.2001@gmail.com">kashishbhardwaj.2001@gmail.com</a></span>
 </footer>
 </div>
 

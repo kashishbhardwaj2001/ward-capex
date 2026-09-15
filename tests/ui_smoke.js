@@ -22,6 +22,12 @@
   // the bars specifically - both have silently rendered empty before
   ok("six city bars render", qa("#citybars .city").length===6, qa("#citybars .city").length+" bars");
   ok("combined effect box present", !!q(".combined"), q(".combined")?q(".combined").textContent.slice(0,18):"MISSING");
+  ok("masthead credit links to LinkedIn",
+     !!q("header a.credit") && q("header a.credit").href==="https://www.linkedin.com/in/kashish2001/",
+     q("header a.credit")?q("header a.credit").textContent.trim():"MISSING");
+  ok("footer contact is a mailto",
+     !!q("footer a[href^='mailto:']") && q("footer a[href^='mailto:']").href==="mailto:kashishbhardwaj.2001@gmail.com",
+     q("footer a[href^='mailto:']")?q("footer a[href^='mailto:']").textContent:"MISSING");
   ok("alignment gap column populated",
      qa("#tbl tbody tr").filter(r=>r.textContent.includes("—")).length < qa("#tbl tbody tr").length*0.5,
      "rows with a dash: "+qa("#tbl tbody tr").filter(r=>r.textContent.includes("—")).length);

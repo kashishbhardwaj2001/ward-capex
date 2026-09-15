@@ -62,6 +62,27 @@ EXTRA_CSS = """
 .pill{float:right;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;
   padding:2px 7px;border-radius:3px;background:var(--rule-2);color:var(--ink-3)}
 .pill.pin{background:var(--water);color:var(--paper);opacity:.9}
+/* masthead: dataset stats on the left, a quiet credit on the right */
+.mast{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.credit{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);text-decoration:none;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:7px;transition:color .12s}
+.credit b{font-weight:500;color:var(--ink-2);transition:color .12s}
+.credit svg{width:11px;height:11px;fill:currentColor;opacity:.7;transition:opacity .12s}
+.credit:hover b,.credit:hover{color:var(--water)}
+.credit:hover svg{opacity:1}
+.credit:focus-visible{outline:2px solid var(--silt);outline-offset:4px;border-radius:2px}
+
+/* footer: sources and the caveat on one row, contact on its own line beneath */
+footer{flex-wrap:wrap}
+footer .foot-note{margin-left:auto;font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+footer .foot-contact{flex-basis:100%;margin-top:6px;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;letter-spacing:.04em}
+footer .foot-contact a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);
+  transition:color .12s,border-color .12s}
+footer .foot-contact a:hover{color:var(--water);border-color:var(--water)}
+footer .foot-contact a:focus-visible{outline:2px solid var(--silt);outline-offset:3px}
+
 /* The unit table is a dropdown: closed by default so 198 rows do not make the page a
    long scroll. The header row is the toggle; the count and hint text live in the eyebrow. */
 details.units>summary{cursor:pointer;list-style:none}
@@ -104,7 +125,12 @@ details.units[open] .closed-only{display:none}
 BODY = """
 <div class="wrap">
 <header>
-  <div class="eyebrow">__EYEBROW__</div>
+  <div class="mast">
+    <div class="eyebrow">__EYEBROW__</div>
+    <a class="credit" href="https://www.linkedin.com/in/kashish2001/" target="_blank" rel="noopener"
+       aria-label="Built by Kashish - LinkedIn profile">Built by <b>Kashish</b>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+  </div>
   <h1>The drainage money does not go where the water goes</h1>
   <p class="dek">Across <b>six Indian cities</b>, the neighbourhoods most likely to flood receive
   <b>12.2% less</b> capital per standard deviation of flood hazard (p&nbsp;=&nbsp;0.0001).
@@ -143,9 +169,11 @@ BODY = """
 </section>
 __SECTIONS__
 <footer>
-  Spending: BBMP Works Bill Public View via OpenCity &middot; Hazard: Copernicus DEM GLO-30 (HAND)
-  &middot; Rainfall: CHIRPS &middot; Boundaries: DataMeet CC BY-SA 2.5 IN &middot; Validation: BBMP / KSNDMC
-  <span style="float:right;font-family:'IBM Plex Mono',monospace">Descriptive, not causal</span>
+  <span class="foot-src">Spending: BBMP Works Bill Public View via OpenCity &middot; Hazard: Copernicus DEM GLO-30 (HAND)
+  &middot; Rainfall: CHIRPS &middot; Boundaries: DataMeet CC BY-SA 2.5 IN &middot; Validation: BBMP / KSNDMC</span>
+  <span class="foot-note">Descriptive, not causal</span>
+  <span class="foot-contact">Contact us &middot;
+    <a href="mailto:kashishbhardwaj.2001@gmail.com">kashishbhardwaj.2001@gmail.com</a></span>
 </footer>
 </div>
 """

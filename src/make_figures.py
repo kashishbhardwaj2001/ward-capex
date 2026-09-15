@@ -162,7 +162,7 @@ def fig4_falsification():
     ax.set_yticks(range(len(f)))
     ax.set_yticklabels(f.category, fontsize=9)
     ax.set_xlabel("Effect of 1 SD more flood hazard on spending share (pp, 95% CI)")
-    ax.set_title("Falsification: only roads respond to flood hazard — not drainage",
+    ax.set_title("Falsification: only roads respond to flood hazard - not drainage",
                  fontweight="bold", loc="left")
     fig.tight_layout()
     fig.savefig(FIG / "F4_falsification.png", bbox_inches="tight")
@@ -245,7 +245,7 @@ def fig7_budget_channel():
     ax.set_yticklabels(labs, fontsize=9)
     ax.invert_yaxis()
     ax.set_xlabel("Change per 1 SD more flood hazard (%, 95% CI)")
-    ax.set_title("Flood-prone wards get smaller budgets — not lower drainage priority",
+    ax.set_title("Flood-prone wards get smaller budgets - not lower drainage priority",
                  fontweight="bold", loc="left", pad=16)
     ax.set_ylim(len(labs) - 0.4, -0.75)
     fig.text(.99, .01, "Bengaluru, 198 wards, FY2013–2022 · ward-clustered SE, year FE",

@@ -11,8 +11,8 @@ whether municipal capital actually reaches the places most exposed to hazard has
 been tested below the city level. Using 68,415 ward-tagged capital work orders from the
 Bruhat Bengaluru Mahanagara Palike (₹23,081 crore, FY2013–2022) joined to a 30 m
 terrain-derived flood-hazard surface for all 198 wards, I find that **flood-prone wards
-receive systematically smaller capital budgets** — 12.8% less per standard deviation of
-hazard (p < 0.0001) — while allocating a modestly *higher* share of what they get to
+receive systematically smaller capital budgets** - 12.8% less per standard deviation of
+hazard (p < 0.0001) - while allocating a modestly *higher* share of what they get to
 drainage (+1.61 pp, p = 0.047). The two effects work against each other, and the budget
 effect wins: flood-prone wards end up spending **9.0% less on drainage in absolute terms**
 (p = 0.016).
@@ -27,21 +27,21 @@ dimension.
 
 Three tests narrow what else could produce it. A **coefficient-contrast test** shows the
 within-budget tilt toward drainage is statistically indistinguishable from the tilt toward
-roads or parks (0 of 5 contrasts significant) — high-hazard wards favour outdoor civil works
+roads or parks (0 of 5 contrasts significant) - high-hazard wards favour outdoor civil works
 generally, not flood protection, which closes the reading that wards protect themselves with
 whatever money they have. A **ward fixed-effects arm** on time-varying CHIRPS rainfall finds
 no within-ward reallocation when a ward has an unusually wet year, ruling out a fixed ward
 characteristic correlated with terrain; it also shows why levels cannot be read here at all,
 since a wet year suppresses the *number* of work orders (−0.55, p = 0.001) and cuts street
-lighting and buildings harder than drainage — construction throughput, not budgeting.
+lighting and buildings harder than drainage - construction throughput, not budgeting.
 Finally, controlling for the **existing drainage stock** (660 km of mapped line-work) leaves
 87% of the effect intact; the p-value weakens only because the control is collinear with
 hazard by construction.
 
 Two measurement findings are of independent interest: the measured "drainage share" of the
 budget varies **35-fold** across three defensible keyword definitions, and **27% of
-drainage spending cannot be assigned to any ward** in BBMP's own categorisation — the
-highest of any category — because trunk drains span wards by construction.
+drainage spending cannot be assigned to any ward** in BBMP's own categorisation - the
+highest of any category - because trunk drains span wards by construction.
 
 ---
 
@@ -54,7 +54,7 @@ accounting system fixed, so only hazard varies. Bengaluru is the only Indian cit
 publishing ward-tagged, project-level, dated actual payments over a long horizon.
 
 This design also required solving a measurement problem. The World Bank's Climate Change
-Knowledge Portal — the standard source for city climate indicators — is published on a
+Knowledge Portal - the standard source for city climate indicators - is published on a
 0.25° grid. Across Bengaluru's 198 wards, its heat index takes **six distinct values**
 (CV 2.5%); its extreme-rainfall index likewise. At ward scale these are not climate
 variables at all, but coarse spatial dummies for which grid cell a ward falls in. The
@@ -75,7 +75,7 @@ hazard measure must therefore be terrain-derived.
 **Hazard** is the share of each ward lying less than 5 m above the nearest drainage
 channel (HAND), computed by filling pits, resolving flats, deriving flow direction and
 accumulation, and defining the drainage network as cells with >200 upstream cells. Mean
-0.375, SD 0.151, range 0.08–0.81 — genuine within-city variation (CV 40%), unlike the
+0.375, SD 0.151, range 0.08–0.81 - genuine within-city variation (CV 40%), unlike the
 climate-grid alternatives (CV 2.5%).
 
 **Drainage spending** is classified from free-text work descriptions under three
@@ -113,7 +113,7 @@ The naive pooled specification suggested stormwater spending *falls* with flood 
 | (3) hazard → stormwater, *budget controlled* | +0.041 | 0.029 | 0.153 | +4.2%, null |
 | **(4) hazard → stormwater SHARE of budget** | **+1.609** | 0.810 | **0.047** | **+1.61 pp** |
 
-Read together: flood-prone wards **do** tilt their spending toward drainage (row 4) — the
+Read together: flood-prone wards **do** tilt their spending toward drainage (row 4) - the
 engineering priorities respond to the terrain. But they are working from budgets that are
 **12.8% smaller** (row 1), and once budget size is controlled the drainage effect vanishes
 (row 3). The net outcome is 9.0% *less* drainage money where the water collects.
@@ -123,7 +123,7 @@ effects, ward area, population, density and distance from the centre.
 
 #### Replication across cities
 
-Pooled across **six cities — Bengaluru, Ahmedabad, Chennai, Pune, Mumbai and Surat**
+Pooled across **six cities - Bengaluru, Ahmedabad, Chennai, Pune, Mumbai and Surat**
 (2,088 unit-years, 283 sub-city units, ₹16,792 crore), with city fixed effects and hazard
 standardised *within* city so a ward is never compared to a zone:
 
@@ -144,7 +144,7 @@ Per city:
 | **Mumbai** | 24 wards | 64 | **+0.237** | 0.442 | **+26.8%** |
 | **Surat** | 10 zones | 59 | **+0.377** | 0.272 | **+45.9%** |
 
-**Negative in four of six cities**, significant in three — but that framing overstates the
+**Negative in four of six cities**, significant in three - but that framing overstates the
 evidence, and a power calculation says why. At 80% power and a 5% test, the *minimum
 detectable effect* is ~13% for Bengaluru, **40% for Surat, 52% for Ahmedabad, 54% for Pune,
 76% for Chennai and 89% for Mumbai**. A misallocation of Bengaluru's magnitude (~12%) could
@@ -160,17 +160,17 @@ a study and weights by *precision* rather than row count:
 |---|---|---|
 | Fixed-effect (inverse-variance) | **−12.2%** | **0.0001** |
 | Random-effects (DerSimonian–Laird) | −12.2% | 0.0001 |
-| Stouffer's combined p (one-sided) | — | 0.0088 |
+| Stouffer's combined p (one-sided) | - | 0.0088 |
 
 **Heterogeneity is nil: Cochran's Q = 4.3 (df 5, p = 0.503), I² = 0%, τ² = 0.** The six
 estimates are statistically consistent with a *single common effect*. Mumbai's +26.8% and
-Surat's +45.9% are not counter-evidence — they are what noisy draws around a −12% effect
+Surat's +45.9% are not counter-evidence - they are what noisy draws around a −12% effect
 look like when the standard error is 0.31. Because τ² = 0, fixed and random effects
 coincide, so nothing rests on the choice of model.
 
 This supersedes the pooled regression as the multi-city result. Pooled OLS weights cities
 by row count, so Bengaluru's 1,722 of 2,088 unit-years dominate it and dropping Bengaluru
-collapses it to −1.6% — an artefact of weighting, not a finding.
+collapses it to −1.6% - an artefact of weighting, not a finding.
 
 #### Is OLS the right estimator?
 
@@ -179,7 +179,7 @@ Not self-evidently, so it is tested rather than assumed:
 | estimator | effect | p |
 |---|---|---|
 | OLS on log(spend) | −9.6% | 0.007 |
-| PPML (Poisson pseudo-ML — handles zeros, no retransformation bias) | −9.6% | 0.247 |
+| PPML (Poisson pseudo-ML - handles zeros, no retransformation bias) | −9.6% | 0.247 |
 | Median (quantile) regression | −12.2% | 0.001 |
 
 All three land between −9.6% and −12.2%. PPML loses significance because it up-weights a
@@ -197,11 +197,11 @@ That gives **three tiers, not two**:
 | Underpowered but informative | Chennai (−20.1%, p=0.095), Pune (−15.4%, p=0.052), Ahmedabad (−14.6%, ns) | directionally supportive; read the **sign**, not the magnitude |
 | Uninformative | Mumbai (MDE 137%), Surat (MDE 162%) | cannot detect anything short of a doubling |
 
-Chennai and Pune reach 10% significance *despite* low power, which is real evidence — but
+Chennai and Pune reach 10% significance *despite* low power, which is real evidence - but
 low power inflates significant estimates (the winner's curse), so their magnitudes should
 not be read literally. Mumbai's +26.8% is not a contradiction: it carries a 137-point
 detection threshold, which makes it noise. Dropping Bengaluru leaves a pooled −1.6%
-(p = 0.87) — what an underpowered panel looks like, not evidence of absence.
+(p = 0.87) - what an underpowered panel looks like, not evidence of absence.
 
 The binding constraint is **disclosure resolution**, not estimation: Pune publishes 7 units,
 Surat 10, Chennai 15. No estimator recovers a ward-scale effect from seven chunks.
@@ -232,9 +232,9 @@ capital, so it is the one independent test of the full decomposition. It fails:
 Every coefficient is null with large standard errors. Three reasons not to over-read either
 direction: Mumbai has **24 wards to Bengaluru's 198**, so power is low; its figures are
 **budget estimates, not audited actuals** (recovered from an unlinked WebDAV folder tree on
-MCGM's portal — they are not published through any navigable index); and its SWD share is
+MCGM's portal - they are not published through any navigable index); and its SWD share is
 extremely noisy (mean 5.4%, SD 16.1). Mumbai is best read as uninformative rather than as
-contradicting Bengaluru — but it is not supporting evidence, and it is reported here rather
+contradicting Bengaluru - but it is not supporting evidence, and it is reported here rather
 than dropped.
 
 The honest summary of the multi-city evidence is therefore narrower than "it replicates":
@@ -251,7 +251,7 @@ and essentially uncorrelated with population size (r = +0.056) or distance from 
 (r = +0.042). The wards getting smaller budgets despite higher hazard are
 disproportionately those with larger scheduled-caste and scheduled-tribe populations.
 
-Worst-affected wards — high hazard, smallest budget relative to hazard:
+Worst-affected wards - high hazard, smallest budget relative to hazard:
 Mattikere, Agaram, Nilasandra, Dharmaraya Swamy Temple, Vannarpet, Gurappanapalya.
 
 ### 4.2 Zero-inflation: a precise null on the extensive margin
@@ -259,7 +259,7 @@ Mattikere, Agaram, Nilasandra, Dharmaraya Swamy Temple, Vannarpet, Gurappanapaly
 Drainage spending occurs in 87% of ward-years, so this is not a corner-solution problem,
 but the hurdle is modelled anyway:
 
-- **Any drainage spending that year (logit):** coefficient +0.003, **p = 0.980** — as
+- **Any drainage spending that year (logit):** coefficient +0.003, **p = 0.980** - as
   precise a null as the data can produce.
 - **Log amount, conditional on spending (OLS, year + zone FE):** +3.8% per SD of hazard,
   p = 0.285.
@@ -267,7 +267,7 @@ but the hurdle is modelled anyway:
 ### 4.3 Falsification
 
 The original design was **hazard-side**: drainage should respond to flood hazard, parks to
-heat hazard, and each should ignore the other's. It appeared to fail — drainage tracked
+heat hazard, and each should ignore the other's. It appeared to fail - drainage tracked
 "heat" more strongly than flood. **The test was broken, not the finding.** CCKP's `hd35`
 takes six distinct values across 198 wards (CV 2.5%); at ward scale it is a dummy for which
 0.25° cell a ward sits in, and z-scoring a step function manufactures apparent signal. It
@@ -296,9 +296,9 @@ the effect in the *total budget*, what matters is not whether drainage is positi
 whether the within-budget tilt is **drainage-specific**. Two stories predict different
 things:
 
-- *flood-targeting* — drainage's coefficient is significantly **larger** than the placebos':
+- *flood-targeting* - drainage's coefficient is significantly **larger** than the placebos':
   wards protect themselves within whatever budget they get;
-- *generic civil works* — drainage moves with roads and parks and is **not distinguishable**
+- *generic civil works* - drainage moves with roads and parks and is **not distinguishable**
   from them: the tilt reflects what kind of land a low-lying ward has, not a flood response.
 
 Estimated as a Wald test on the coefficient difference, stacking each pair of shares on the
@@ -313,8 +313,8 @@ same ward sample so the covariance is available (`src/analyse_falsification.py`)
 | roads | −0.92 | 1.32 | 0.485 |
 
 **Zero of five contrasts are significant.** There is no drainage-specific targeting: the
-composition tilt in high-hazard wards runs toward **outdoor civil works generally** — roads
-+2.6 pp, parks +2.1 pp, drainage +1.7 pp — and away from buildings, lighting and water
+composition tilt in high-hazard wards runs toward **outdoor civil works generally** - roads
++2.6 pp, parks +2.1 pp, drainage +1.7 pp - and away from buildings, lighting and water
 supply. That is the pattern one expects of low-lying, less-built-up land, not of a flood
 response.
 
@@ -338,8 +338,8 @@ significantly different from drainage (p = 0.485), so the data cannot distinguis
 hides in roads" from "low-lying wards get more outdoor civil works of every kind". What
 survives is the weaker and still consequential point, which the classifier validation
 reaches independently: **80% of the money the medium tier tags as drainage is bundled
-road-and-drain work**. Whatever the mechanism, any study — or any climate-budget-tagging
-exercise — that counts only the drainage line will mis-measure resilience investment,
+road-and-drain work**. Whatever the mechanism, any study - or any climate-budget-tagging
+exercise - that counts only the drainage line will mis-measure resilience investment,
 because the line item and the physical asset do not correspond.
 
 ### 4.5 The alignment gap
@@ -371,10 +371,10 @@ keyword classifier:
 | **BBMP "Drainage + Roads and Drains" vs medium tier** | **+0.74** | **+0.70** |
 
 The medium tier ranks wards much as BBMP's own classification does, once BBMP's
-*Roads and Drains* category is included — independent support both for the classifier and
+*Roads and Drains* category is included - independent support both for the classifier and
 for §4.4's claim that drainage and road spending are entangled in practice.
 
-### 4.7 Drainage is the least ward-attributable category — in BBMP's own data
+### 4.7 Drainage is the least ward-attributable category - in BBMP's own data
 
 BBMP's matrix carries an explicit "Untagged Expenses / Multiple Wards" row. By category:
 
@@ -393,9 +393,9 @@ so they cannot be assigned to one. My own regex detects multi-ward naming in onl
 orders (₹1,114 Cr), so the true unassignable fraction is roughly seven times what
 text-matching alone reveals.
 
-**This materially qualifies the null.** If a quarter of drainage money — and
+**This materially qualifies the null.** If a quarter of drainage money - and
 disproportionately the *large trunk projects*, which are precisely those built where water
-collects — cannot be attributed to any ward, then the ward-level analysis observes a
+collects - cannot be attributed to any ward, then the ward-level analysis observes a
 non-random subset biased against finding the relationship. The null should be read as:
 *no detectable alignment in ward-attributable drainage spending*, which is a narrower and
 more defensible claim than no alignment at all.
@@ -420,7 +420,7 @@ quartile versus the bottom (Spearman ρ = +0.26, Pearson r = +0.21). Elevation r
 other way, as it should (ρ = −0.16).
 
 The correlation is moderate rather than strong, which is the expected result: HAND measures
-topographic susceptibility, not drainage capacity, blockage or rainfall intensity — the
+topographic susceptibility, not drainage capacity, blockage or rainfall intensity - the
 proximate causes of urban flooding. It is sufficient to establish that the hazard variable
 is measuring something real, which is what the study requires.
 
@@ -434,13 +434,13 @@ ward wealth, or ward politics, or anything else fixed about a ward that the cont
 
 CHIRPS daily (0.05°, ~5.5 km) supplies a hazard measure that **moves**. Bengaluru wards
 averaged 4.9 extreme-rain days in FY2016 and 17.4 in FY2022. The question becomes
-within-ward: *when a ward has an unusually wet year, does its drainage budget respond?* —
+within-ward: *when a ward has an unusually wet year, does its drainage budget respond?* -
 with a ward fixed effect absorbing terrain, wealth, councillor and location, and a year
 fixed effect absorbing the city-wide budget cycle. After both, **39% of the rainfall
 variation survives** to identify the estimates.
 
 **Run naively this produces a dramatic and wrong result.** Within-ward, a wetter year
-predicts *lower* drainage spending — β = −0.92 log points per SD, p = 0.001. Read as a
+predicts *lower* drainage spending - β = −0.92 log points per SD, p = 0.001. Read as a
 budget response, budgets move the wrong way when it rains.
 
 They do not. The outcome here is *executed* spending recovered from work orders and their
@@ -459,13 +459,13 @@ categories**. This is construction throughput, not allocation. Level specificati
 therefore reported but not interpreted; the **share** is the specification that answers the
 question, because a shock common to all categories cancels out of a ratio.
 
-On the share, **no specification detects a within-ward response** — contemporaneous or
+On the share, **no specification detects a within-ward response** - contemporaneous or
 lagged one year, extreme-rain days or annual millimetres. A ward that has an unusually wet
 year does not tilt its capital budget toward drainage the year after.
 
 The null is **moderate, not strong**: 39% residual variation, and wards sharing a 5.5 km
 CHIRPS pixel contribute none of it, so a modest real response could be missed. What it does
-establish is what the cross-section could not — the headline is not an artefact of a fixed
+establish is what the cross-section could not - the headline is not an artefact of a fixed
 ward characteristic correlated with terrain. Within a single ward, with everything fixed
 about it held constant, the hazard moves and the allocation does not follow.
 
@@ -482,7 +482,7 @@ ward-resolution source: **660 km of mapped drainage line-work across Bengaluru's
 nothing mapped.
 
 Existing drainage is indeed concentrated where hazard is (Spearman ρ = +0.47 on engineered
-line-work) — which is what the stock story needs. Part of that correlation is *mechanical*
+line-work) - which is what the stock story needs. Part of that correlation is *mechanical*
 and must be named: HAND is computed from the drainage network implied by the terrain, and
 OSM's `stream`/`river` ways follow the same topography, so the engineered-only measure is
 the one used as the control.
@@ -495,7 +495,7 @@ the one used as the control.
 | + log density | −0.0623 | 0.0365 | 0.087 | −6.0% |
 | + density × hazard interaction | −0.0751 | 0.0411 | 0.068 | −7.2% |
 
-**The effect survives in magnitude — 87% of it — while the standard error widens 1.21×.**
+**The effect survives in magnitude - 87% of it - while the standard error widens 1.21×.**
 Reading the p-value alone (0.016 → 0.085) would mistake multicollinearity for the effect
 disappearing: the control correlates with hazard by construction, so it inflates the
 standard error while barely moving the coefficient.
@@ -515,22 +515,22 @@ The hazard penalty is roughly **twice as large where little drainage exists**. E
 infrastructure absorbs some of the gap; it does not close it. The penalty stays negative on
 both sides.
 
-The same control applied to the pooled panel (2,029 unit-years, five cities — Surat's drain
+The same control applied to the pooled panel (2,029 unit-years, five cities - Surat's drain
 density is per ward while its budget unit is the zone, so it is omitted) moves the estimate
 from −6.7% to −7.9%: **119% of the effect retained**, i.e. it strengthens slightly. That is
-a weaker test — coarser units, shorter panels, and OSM completeness varies far more across
-cities than within one — but it points the same way.
+a weaker test - coarser units, shorter panels, and OSM completeness varies far more across
+cities than within one - but it points the same way.
 
 ### 4.11 It is not partisan targeting
 
-BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 — matching
+BBMP's last council election was 2015 (BJP 100, INC 76, JDS 14, IND 7, SDPI 1 - matching
 the published headline exactly); the council's term ended in September 2020 with no
 election since, so the 2015 assignment covers the panel. A ward is coded *aligned* when its
 corporator's party held the Karnataka state government that year (39% of ward-years).
 
 | Test | Result |
 |---|---|
-| Aligned with state ruling party → total budget | **+1.9%, p = 0.68** — no effect |
+| Aligned with state ruling party → total budget | **+1.9%, p = 0.68** - no effect |
 | Flood hazard → total budget, no political control | −8.0%, p = 0.013 |
 | + aligned dummy | −8.1%, p = 0.013 |
 | + party fixed effects | −8.1%, **p = 0.009** |
@@ -545,8 +545,8 @@ flood-prone (mean hazard z = +0.27) than BJP wards (−0.17), and the seven inde
 the most exposed of all (+0.89).
 
 **An attenuation to state plainly.** The headline −12.8% is estimated controlling for ward
-area, population, density and distance from the centre. Adding **elevation and slope** —
-which are mechanically related to HAND, since all three derive from the same DEM — pulls
+area, population, density and distance from the centre. Adding **elevation and slope** -
+which are mechanically related to HAND, since all three derive from the same DEM - pulls
 the coefficient to **−8.0%**, still significant at 1–5%. The honest range for the budget
 penalty is therefore **−8% to −13% per standard deviation of hazard**, depending on how
 much terrain is absorbed into the controls. Every specification is negative and
@@ -570,7 +570,7 @@ every threshold, and against two threshold-free measures:
 | **mean HAND** *(no threshold at all)* | **−13.6%** | **0.0007** |
 | topographic wetness index | −7.4% | 0.056 |
 
-Significant at every threshold, and **strongest under the threshold-free measure** — the
+Significant at every threshold, and **strongest under the threshold-free measure** - the
 opposite of what a threshold artefact looks like.
 
 **(b) Is it propped up by 2011 census population, on a FY2013–22 panel?** No.
@@ -599,24 +599,24 @@ a council that did not exist. Restricting to FY2013–2020 gives −7.5% (p = 0.
 
 **The headline survives any correction. The +1.61pp share result does not survive
 false-discovery-rate correction** and should be described as suggestive rather than
-established. This does not affect the main claim — which rests on the total-budget channel —
+established. This does not affect the main claim - which rests on the total-budget channel -
 but it is stated rather than left for a reader to discover.
 
 ## 5. Limitations
 
 1. **Descriptive, not causal.** Terrain hazard is time-invariant and non-manipulable;
    there is no counterfactual Bengaluru with flatter ground. No causal claim is made.
-2. **Multi-ward attribution — the binding limitation.** BBMP's own categorisation cannot
+2. **Multi-ward attribution - the binding limitation.** BBMP's own categorisation cannot
    assign **27% of drainage spending** to any ward, the highest share of any category it
    publishes (§4.7). Text-matching detects only 3.8%. Trunk drains span wards by
    construction and are built where water collects, so the unobserved portion is
-   systematically concentrated in high-hazard areas — biasing β **toward zero**. This is
+   systematically concentrated in high-hazard areas - biasing β **toward zero**. This is
    the single most important qualification on the null result.
 3. **HAND is a proxy.** No free hydraulic pluvial model exists for Indian cities. HAND
    captures topographic susceptibility, not drainage capacity, rainfall intensity or
-   blockage — the proximate causes of urban flooding.
-4. **Work orders are payments, not budgets.** Arguably better — they are what was actually
-   spent — but not an allocation decision. §4.9 shows this is not a theoretical worry: a
+   blockage - the proximate causes of urban flooding.
+4. **Work orders are payments, not budgets.** Arguably better - they are what was actually
+   spent - but not an allocation decision. §4.9 shows this is not a theoretical worry: a
    wet year suppresses the *number* of work orders (−0.55, p = 0.001), so rainfall shocks
    move executed spending through construction throughput regardless of any budget
    response. Level specifications on time-varying rainfall are uninterpretable for that
@@ -631,12 +631,12 @@ but it is stated rather than left for a reader to discover.
    read the street a drain sits on as evidence the job was a road job.* The narrow tier is clean but
    recovers only 6.5% of genuine drainage orders. Under the narrow definition the hazard
    effect on drainage share is **significantly positive** (+0.445 pp, p = 0.013 with Conley
-   spatial SEs) — dedicated stormwater assets do track hazard; bundled road money does not.
+   spatial SEs) - dedicated stormwater assets do track hazard; bundled road money does not.
 5. **Depth varies by city, and the two non-replications are the coarsest panels.**
    Bengaluru carries the decomposition with 198 wards and a within-city hazard SD of 0.149.
    Chennai, Pune and Ahmedabad contribute the reduced form at coarser units (zones, ward
    offices) over shorter panels. Surat is joined via a purpose-built ward→zone crosswalk,
-   but its budget reports only 10 zones, leaving a hazard SD of 0.050 — the most spatially
+   but its budget reports only 10 zones, leaving a hazard SD of 0.050 - the most spatially
    smoothed of the six; Mumbai publishes budget *estimates* across 24 wards. Both run
    positive and neither is distinguishable from zero. Where the reporting unit is coarse
    enough, within-city hazard variation is averaged away before it can be related to
@@ -645,26 +645,26 @@ but it is stated rather than left for a reader to discover.
 5b. **The stock control is OpenStreetMap, with the measurement error that implies.** OSM
    mapping effort tracks affluence and centrality, so mapped drain density overstates the
    stock in rich central wards. That bias runs *toward* the rival explanation, which is why
-   the control is usable — but a purpose-built municipal drainage GIS would be better, and
+   the control is usable - but a purpose-built municipal drainage GIS would be better, and
    none is published. Part of the hazard–stock correlation is also mechanical, since HAND
    is derived from terrain-implied drainage and OSM's natural watercourses follow the same
    topography; the control therefore uses engineered line-work only (§4.10).
 5c. **CHIRPS resolves neighbourhoods, not wards.** At 0.05° (~5.5 km) Bengaluru's 198 wards
    occupy roughly 60–70 distinct pixels, and wards sharing a pixel have identical rainfall
    by construction. After ward and year fixed effects only 39% of the rainfall variation
-   survives, so the within-ward null in §4.9 is **moderate evidence, not strong** — a real
+   survives, so the within-ward null in §4.9 is **moderate evidence, not strong** - a real
    but modest reallocation could be missed.
-6. **Selection into the sample — tested, and partly cleared.** Only six Indian cities publish
+6. **Selection into the sample - tested, and partly cleared.** Only six Indian cities publish
    sub-city capital spending at all, and the obvious worry is that they are unrepresentative.
    Comparing all 20 cities for which hazard data exists, publishers and non-publishers are
    **statistically indistinguishable on every hazard observable** (share of land with HAND
-   < 5 m, mean HAND, days >20 mm, days >50 mm, annual precipitation — 0 of 5 significant at
+   < 5 m, mean HAND, days >20 mm, days >50 mm, annual precipitation - 0 of 5 significant at
    5%). The crude selection story, that sub-city disclosure comes from the dry well-drained
    cities where the question barely bites, is not supported. The one observable that does
    differ is mean ward **area** (14.9 vs 3.9 km², p = 0.003), which is an artefact of this
    study rather than a fact about the cities: three of the six publishers report at zone
    level. What this cannot test is **governance quality**, which is what the risk is actually
-   about — no free pan-Indian measure exists at this resolution, so the subtle version of the
+   about - no free pan-Indian measure exists at this resolution, so the subtle version of the
    story (publishers are the *competent* cities, and competent cities may allocate
    differently) remains open.
 7. **Hazard validation passed but is moderate.** Spearman ρ = +0.26 against 395 official

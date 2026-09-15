@@ -29,8 +29,8 @@
      !!q("footer a[href^='mailto:']") && q("footer a[href^='mailto:']").href==="mailto:kashishbhardwaj.2001@gmail.com",
      q("footer a[href^='mailto:']")?q("footer a[href^='mailto:']").textContent:"MISSING");
   ok("alignment gap column populated",
-     qa("#tbl tbody tr").filter(r=>r.textContent.includes("—")).length < qa("#tbl tbody tr").length*0.5,
-     "rows with a dash: "+qa("#tbl tbody tr").filter(r=>r.textContent.includes("—")).length);
+     qa("#tbl tbody tr").filter(r=>[...r.cells].some(c=>c.textContent.trim()==="-")).length < qa("#tbl tbody tr").length*0.5,
+     "rows with a dash: "+qa("#tbl tbody tr").filter(r=>[...r.cells].some(c=>c.textContent.trim()==="-")).length);
   const EXP={ladder:5,tiers:3,parties:4,robust:8};   // ladder = 4 quartiles + 1 caption
   Object.keys(EXP).forEach(id=>
     ok("chart #"+id+" has "+EXP[id]+" rows",

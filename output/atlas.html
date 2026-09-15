@@ -322,7 +322,7 @@ const METRICS = {
   share: {lab:"Drainage share", unit:"%",       pal:PAL,    dec:1, rich:true,
           desc:"drainage as % of the ward's works budget"},
   gap:   {lab:"Alignment gap",  unit:" pp",     pal:GAPPAL, dec:1, rich:true, diverge:true,
-          desc:"residual — red = high hazard, low spend"}
+          desc:"residual - red = high hazard, low spend"}
 };
 
 function vals(c,m){return CITIES[c].features.map(f=>f.properties[m]).filter(v=>v!=null&&isFinite(v));}
@@ -337,7 +337,7 @@ function colour(x,sc,m){
   return pal[i];
 }
 function fmt(x,m){
-  if(x==null||!isFinite(x)) return "—";
+  if(x==null||!isFinite(x)) return "-";
   const M=METRICS[m]; return (x>0&&M.diverge?"+":"")+x.toFixed(M.dec)+M.unit;
 }
 
@@ -420,7 +420,7 @@ function show(){
   const p=C.features[i].properties, r=[];
   if(p.gap!=null) r.push(["Alignment",'<span class="tag '+(p.gap<0?"under":"over")+'">'+
     (p.gap<0?"UNDER":"OVER")+" by "+Math.abs(p.gap).toFixed(1)+" pp</span>"]);
-  r.push(["Flood hazard (z)", p.hz==null?"—":p.hz.toFixed(2)]);
+  r.push(["Flood hazard (z)", p.hz==null?"-":p.hz.toFixed(2)]);
   if(p.hand!=null)     r.push(["Mean HAND", p.hand.toFixed(1)+" m"]);
   if(p.total_cr!=null) r.push(["Total capital", "₹"+p.total_cr.toFixed(1)+" Cr"]);
   r.push(["Stormwater spend", "₹"+p.storm_cr.toFixed(1)+" Cr"]);
@@ -458,7 +458,7 @@ function table(){
       return '<tr data-i="'+i+'">'+cols.map(c=>{
         const k=c[0], v=p[k];
         if(k==="nm") return "<td>"+v+"</td>";
-        if(v==null)  return "<td>—</td>";
+        if(v==null)  return "<td>-</td>";
         if(k==="gap") return '<td style="color:'+(v<0?"var(--gap)":"var(--good)")+'">'+
                              (v>0?"+":"")+v.toFixed(1)+"</td>";
         return "<td>"+(typeof v==="number"?v.toFixed(k==="hz"||k==="spk"?2:1):v)+"</td>";
@@ -544,7 +544,7 @@ function cityBar(){
   sel.innerHTML = Object.keys(CITIES).map(k=>{
     const c=CITIES[k];
     return '<option value="'+k+'"'+(cur===k?" selected":"")+">"+c.label+
-           " — "+c.n+" "+c.unitWord+(c.n>1?"s":"")+"</option>";}).join("");
+           " - "+c.n+" "+c.unitWord+(c.n>1?"s":"")+"</option>";}).join("");
   sel.value=cur;
   const c=CITIES[cur];
   document.getElementById("cityhint").textContent =
@@ -558,11 +558,11 @@ function meta(){
     " · ₹"+c.storm_cr.toLocaleString()+" Cr stormwater";
   document.getElementById("citynote").innerHTML = c.rich
     ? "Bengaluru is the only city publishing ward-level <b>total</b> capital spending alongside "+
-      "stormwater, plus census population and an official flood-point inventory — so it is the "+
+      "stormwater, plus census population and an official flood-point inventory - so it is the "+
       "only one with a drainage share, an alignment gap and an equity read-out. The other five "+
       "show what they actually publish, which is why the headline is estimated here."
     : c.label+" publishes stormwater capital by "+c.unitWord+", but not the <b>total</b> "+
-      c.unitWord+" budget — so the share and alignment-gap metrics that drive the headline "+
+      c.unitWord+" budget - so the share and alignment-gap metrics that drive the headline "+
       "cannot be computed for it. Hazard and stormwater spending are shown; the decomposition "+
       "needs Bengaluru's disclosure.";
 }

@@ -64,11 +64,11 @@ EXTRA_CSS = """
 .pill.pin{background:var(--water);color:var(--paper);opacity:.9}
 /* masthead: dataset stats on the left, a quiet credit on the right */
 .mast{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
-.credit{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+.credit{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink-3);text-decoration:none;white-space:nowrap;
-  display:inline-flex;align-items:center;gap:7px;transition:color .12s}
+  display:inline-flex;align-items:center;gap:9px;transition:color .12s}
 .credit b{font-weight:500;color:var(--ink-2);transition:color .12s}
-.credit svg{width:11px;height:11px;fill:currentColor;opacity:.7;transition:opacity .12s}
+.credit svg{width:16px;height:16px;fill:currentColor;opacity:.7;transition:opacity .12s}
 .credit:hover b,.credit:hover{color:var(--water)}
 .credit:hover svg{opacity:1}
 .credit:focus-visible{outline:2px solid var(--silt);outline-offset:4px;border-radius:2px}

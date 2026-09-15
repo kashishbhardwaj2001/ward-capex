@@ -85,13 +85,15 @@ footer .foot-contact a:focus-visible{outline:2px solid var(--silt);outline-offse
 
 /* The unit table is a dropdown: closed by default so 198 rows do not make the page a
    long scroll. The header row is the toggle; the count and hint text live in the eyebrow. */
-details.units>summary{cursor:pointer;list-style:none}
+details.units>summary{cursor:pointer;list-style:none;flex-wrap:wrap}
 details.units>summary::-webkit-details-marker{display:none}
 details.units>summary:focus-visible{outline:2px solid var(--silt);outline-offset:4px}
-details.units .chev{display:inline-block;width:0;height:0;margin-right:8px;vertical-align:1px;
-  border-left:5px solid var(--ink-3);border-top:4px solid transparent;border-bottom:4px solid transparent;
-  transition:transform .12s}
-details.units[open] .chev{transform:rotate(90deg)}
+/* the toggle reads as a button, in the same vocabulary as the metric switcher */
+details.units .tbtn{margin-left:auto;font-size:11.5px;line-height:1.4;padding:4px 10px;
+  border:1px solid var(--rule);border-radius:3px;color:var(--ink-2);white-space:nowrap;
+  transition:border-color .12s,color .12s,background .12s}
+details.units>summary:hover .tbtn{border-color:var(--ink-3);color:var(--ink)}
+details.units[open] .tbtn{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 details.units .open-only{display:none}
 details.units[open] .open-only{display:inline}
 details.units[open] .closed-only{display:none}
@@ -260,11 +262,9 @@ def build_sections(R):
     S.append(
         '<section><details class="units" id="units">'
         '<summary class="sec-h"><h2>Every unit</h2>'
-        '<span class="eyebrow"><span class="chev" aria-hidden="true"></span>'
-        '<span id="tblcount"></span> &middot; '
-        '<span class="closed-only">click to expand</span>'
-        '<span class="open-only">click a column to sort &middot; click a row to map it</span>'
-        '</span></summary>'
+        '<span class="eyebrow open-only">click a column to sort &middot; click a row to map it</span>'
+        '<span class="tbtn"><span class="closed-only">Show all <span id="tblcount"></span> &#9662;</span>'
+        '<span class="open-only">Hide table &#9652;</span></span></summary>'
         '<div style="overflow-x:auto" id="tblwrap"></div></details></section>')
 
     # ---- tagging elasticity

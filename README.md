@@ -202,4 +202,4 @@ PAPER_DRAFT.md      ~15 pp working paper
 DATA_DICTIONARY.md  every file, every column, and the traps
 ```
 
-Progress against the full plan: [`../PROJECT_PLAN.md`](../PROJECT_PLAN.md).
+Progress against the full plan: [`PROJECT_PLAN.md`](PROJECT_PLAN.md).

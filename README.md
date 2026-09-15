@@ -2,6 +2,8 @@
 
 **Ward-level evidence on whether Indian municipal capital spending tracks measured climate hazard.**
 
+**Live site: [climatequant.org](https://climatequant.org)**
+
 > Within a city — where the budget, the politics and the accounting system are all held
 > constant — do the wards with higher measured flood hazard actually get more money?
 

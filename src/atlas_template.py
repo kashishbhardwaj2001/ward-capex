@@ -62,6 +62,18 @@ EXTRA_CSS = """
 .pill{float:right;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;
   padding:2px 7px;border-radius:3px;background:var(--rule-2);color:var(--ink-3)}
 .pill.pin{background:var(--water);color:var(--paper);opacity:.9}
+/* The unit table is a dropdown: closed by default so 198 rows do not make the page a
+   long scroll. The header row is the toggle; the count and hint text live in the eyebrow. */
+details.units>summary{cursor:pointer;list-style:none}
+details.units>summary::-webkit-details-marker{display:none}
+details.units>summary:focus-visible{outline:2px solid var(--silt);outline-offset:4px}
+details.units .chev{display:inline-block;width:0;height:0;margin-right:8px;vertical-align:1px;
+  border-left:5px solid var(--ink-3);border-top:4px solid transparent;border-bottom:4px solid transparent;
+  transition:transform .12s}
+details.units[open] .chev{transform:rotate(90deg)}
+details.units .open-only{display:none}
+details.units[open] .open-only{display:inline}
+details.units[open] .closed-only{display:none}
 #tbl tbody tr{cursor:pointer}
 #tbl tbody tr.hov{background:var(--rule-2)}
 #tbl tbody tr.sel{background:var(--rule-2);box-shadow:inset 3px 0 0 var(--ink)}
@@ -218,9 +230,14 @@ def build_sections(R):
 
     # ---- the sortable unit table
     S.append(
-        '<section><div class="sec-h"><h2>Every unit</h2>'
-        '<span class="eyebrow">click a column to sort &middot; click a row to map it</span>'
-        '</div><div style="overflow-x:auto" id="tblwrap"></div></section>')
+        '<section><details class="units" id="units">'
+        '<summary class="sec-h"><h2>Every unit</h2>'
+        '<span class="eyebrow"><span class="chev" aria-hidden="true"></span>'
+        '<span id="tblcount"></span> &middot; '
+        '<span class="closed-only">click to expand</span>'
+        '<span class="open-only">click a column to sort &middot; click a row to map it</span>'
+        '</span></summary>'
+        '<div style="overflow-x:auto" id="tblwrap"></div></details></section>')
 
     # ---- tagging elasticity
     t = meta.get("tiers", [])

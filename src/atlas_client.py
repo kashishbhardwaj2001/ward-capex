@@ -196,6 +196,9 @@ function table(){
                              (v>0?"+":"")+v.toFixed(1)+"</td>";
         return "<td>"+(typeof v==="number"?v.toFixed(k==="hz"||k==="spk"?2:1):v)+"</td>";
       }).join("")+"</tr>";}).join("")+"</tbody></table>";
+  /* the dropdown's closed label: "198 wards" / "15 zones" */
+  const cnt=document.getElementById("tblcount");
+  if(cnt) cnt.textContent=C.features.length+" "+C.unitWord+(C.features.length===1?"":"s");
   paint();
 }
 

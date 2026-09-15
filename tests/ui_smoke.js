@@ -73,6 +73,14 @@
   ok("SORT reorders", f0!==f1, f0+" -> "+f1);
   ok("SORT shows arrow", qa("#tbl th .ar").length===1);
 
+  // --- 6b. UNIT TABLE is a dropdown: closed on load so 198 rows do not lengthen the page
+  const det=q("#units");
+  ok("UNITS dropdown present", !!det && det.tagName==="DETAILS");
+  ok("UNITS dropdown closed on load", det && !det.open);
+  ok("UNITS count label", q("#tblcount").textContent==="198 wards", q("#tblcount").textContent);
+  q("#units>summary").click();
+  ok("UNITS dropdown opens on click", det.open);
+
   // --- 7. METRIC switch
   const fill0=qa("#map path")[0].getAttribute("fill");
   const mb=qa("#metrics button").find(b=>!b.classList.contains("on"));
@@ -94,6 +102,7 @@
   ok("CITY switch: readout adapts", ro().includes("WARD READ-OUT"));
   ok("CITY switch: note explains limits", q("#citynote").textContent.includes("Mumbai"));
   ok("CITY switch: table cols shrink", qa("#tbl thead th").length===4, qa("#tbl thead th").length);
+  ok("CITY switch: unit count relabelled", q("#tblcount").textContent==="24 wards", q("#tblcount").textContent);
   // hover still works after a redraw (the delegation test)
   const p2=qa("#map path").find(p=>!p.classList.contains("sel"));
   const b3=ro(); fire(p2,"mousemove",{clientX:200,clientY:200});
@@ -102,6 +111,7 @@
   sel.value="surat"; sel.dispatchEvent(new Event("change",{bubbles:true}));
   ok("SURAT renders 10 zones", qa("#map path").length===10, qa("#map path").length+" paths");
   ok("SURAT readout says ZONE", ro().includes("ZONE READ-OUT"));
+  ok("SURAT count says zones", q("#tblcount").textContent==="10 zones", q("#tblcount").textContent);
 
   // back to Bengaluru
   sel.value="bengaluru"; sel.dispatchEvent(new Event("change",{bubbles:true}));

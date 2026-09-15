@@ -88,12 +88,16 @@ footer .foot-contact a:focus-visible{outline:2px solid var(--silt);outline-offse
 details.units>summary{cursor:pointer;list-style:none;flex-wrap:wrap}
 details.units>summary::-webkit-details-marker{display:none}
 details.units>summary:focus-visible{outline:2px solid var(--silt);outline-offset:4px}
-/* the toggle reads as a button, in the same vocabulary as the metric switcher */
-details.units .tbtn{margin-left:auto;font-size:11.5px;line-height:1.4;padding:4px 10px;
-  border:1px solid var(--rule);border-radius:3px;color:var(--ink-2);white-space:nowrap;
-  transition:border-color .12s,color .12s,background .12s}
-details.units>summary:hover .tbtn{border-color:var(--ink-3);color:var(--ink)}
-details.units[open] .tbtn{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* the toggle is the one filled control on the page: it has to be found without reading */
+details.units .tbtn{margin-left:auto;display:inline-flex;align-items:center;gap:9px;
+  font-size:14.5px;font-weight:600;line-height:1.3;padding:11px 20px;border-radius:5px;
+  background:var(--water);color:var(--paper);border:1px solid var(--water);white-space:nowrap;
+  box-shadow:var(--shadow);transition:filter .12s,background .12s,color .12s,border-color .12s}
+details.units .tbtn-ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+details.units>summary:hover .tbtn{filter:brightness(1.12)}
+details.units[open] .tbtn{background:transparent;color:var(--ink-2);border-color:var(--rule);box-shadow:none}
+details.units[open] .tbtn-ic{transform:rotate(180deg)}
 details.units .open-only{display:none}
 details.units[open] .open-only{display:inline}
 details.units[open] .closed-only{display:none}
@@ -175,7 +179,8 @@ __SECTIONS__
   &middot; Rainfall: CHIRPS &middot; Boundaries: DataMeet CC BY-SA 2.5 IN &middot; Validation: BBMP / KSNDMC</span>
   <span class="foot-note">Descriptive, not causal</span>
   <span class="foot-contact">Contact us &middot;
-    <a href="mailto:kashishbhardwaj.2001@gmail.com">kashishbhardwaj.2001@gmail.com</a></span>
+    <a href="mailto:kashishbhardwaj.2001@gmail.com">kashishbhardwaj.2001@gmail.com</a> &middot;
+    <a href="https://www.linkedin.com/in/kashish2001/" target="_blank" rel="noopener">linkedin.com/in/kashish2001</a></span>
 </footer>
 </div>
 """
@@ -263,8 +268,10 @@ def build_sections(R):
         '<section><details class="units" id="units">'
         '<summary class="sec-h"><h2>Every unit</h2>'
         '<span class="eyebrow open-only">click a column to sort &middot; click a row to map it</span>'
-        '<span class="tbtn"><span class="closed-only">Show all <span id="tblcount"></span> &#9662;</span>'
-        '<span class="open-only">Hide table &#9652;</span></span></summary>'
+        '<span class="tbtn"><span class="closed-only">Show all <span id="tblcount"></span></span>'
+        '<span class="open-only">Hide table</span>'
+        '<svg class="tbtn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'
+        '</span></summary>'
         '<div style="overflow-x:auto" id="tblwrap"></div></details></section>')
 
     # ---- tagging elasticity
